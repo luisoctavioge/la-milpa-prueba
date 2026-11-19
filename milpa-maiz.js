@@ -142,7 +142,10 @@
   const CONSTRUIDA = [0, 2, 4, 6, 9, 11, 14, 18, 22, 26, 30, 34, 38, 43]; // día en que llega cada parcela (bots, §13)
   const vecinosDe = k => { const [c, r] = k.split(',').map(Number); return [[c - 1, r], [c + 1, r], [c, r - 1], [c, r + 1]].map(([a, b]) => `${a},${b}`); };
 
-  function milpa({ jugador, estrategia = 'deja', dias = 84, lluvias = 2 }) {
+  // segurasFijas: true = las 4 seguras resiembran siempre su rumbo (regla vieja, ronda 6); false = desde la segunda siembra
+  // se elige semilla en todas, también en las seguras (Luis, 19 nov). Las páginas viejas usan el valor por defecto.
+  function milpa({ jugador, estrategia = 'deja', dias = 84, lluvias = 2, segurasFijas = true }) {
+    const fija = k => segurasFijas && SEGURAS[k];
     const P = {};                 // parcela → { lote, ultima, desde }
     const muestrario = new Map(); // tipo → { mazorca, dia, parcela }
     const estante = [], semillas = [], historia = [];
@@ -169,20 +172,22 @@
       const nuevas = [];
       for (const [k, m] of Object.entries(cosechas)) {
         P[k].ultima = m;
-        if (SEGURAS[k]) { P[k].lote = loteRumbo(SEGURAS[k], jugador); continue; }
+        if (fija(k)) { P[k].lote = loteRumbo(SEGURAS[k], jugador); continue; }
         if (estrategia === 'curioso' && muestrario.get(tipoDe(m)).dia === d) nuevas.push(m);
         P[k].lote = semillaDe(m);
       }
+      // 'rumbos': como 'deja', pero una vez por semana vuelve a sembrar las 4 semillas iniciales en las seguras
+      if (estrategia === 'rumbos' && d % 7 === 6) Object.keys(SEGURAS).forEach(k => { if (P[k]) P[k].lote = loteRumbo(SEGURAS[k], jugador); });
       if (estrategia === 'curioso') {
         for (const m of nuevas) { semillas.push(semillaDe(m)); if (semillas.length > 6) semillas.shift(); }
         // cada semana siembra sus semillas guardadas en las parcelas que no son seguras
-        if (d % 7 === 6 && semillas.length) Object.keys(P).filter(k => !SEGURAS[k]).forEach((k, i) => { P[k].lote = semillas[i % semillas.length]; });
+        if (d % 7 === 6 && semillas.length) Object.keys(P).filter(k => !fija(k)).forEach((k, i) => { P[k].lote = semillas[i % semillas.length]; });
       }
       if (estrategia === 'morado') {
         // guarda la mazorca más morada de la semana y la siembra en todas las que no son seguras
         const peso = m => m.granos.filter(g => g.color === 'morado' || g.color === 'guinda' || g.color === 'negro').length / (m.granos.length || 1);
-        const mejor = Object.entries(cosechas).filter(([k]) => !SEGURAS[k]).sort((a, b) => peso(b[1]) - peso(a[1]))[0];
-        if (mejor && d % 7 === 6) Object.keys(P).filter(k => !SEGURAS[k]).forEach(k => { P[k].lote = semillaDe(mejor[1]); });
+        const mejor = Object.entries(cosechas).filter(([k]) => !fija(k)).sort((a, b) => peso(b[1]) - peso(a[1]))[0];
+        if (mejor && d % 7 === 6) Object.keys(P).filter(k => !fija(k)).forEach(k => { P[k].lote = semillaDe(mejor[1]); });
       }
       historia.push({ dia: d, tipos: muestrario.size, parcelas: Object.keys(P).length });
     }
