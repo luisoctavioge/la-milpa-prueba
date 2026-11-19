@@ -404,7 +404,7 @@ try{
   /* el modo prueba de un día (Luis, 19 nov): para descubrir casi todo el monte en un día de pruebas, entrando cada ~30 min.
      Solo cambia estos números en memoria (datos.json no se toca). Simulado: 13 de 14 parcelas y el piso 3 en ~11 h. */
   MODO=((()=>{try{return localStorage.getItem('milpa.prototipo.modo');}catch(e){return null;}})())||'prueba';
-  if(MODO==='prueba'){D.reloj.rapido_horas_por_hora_real=48;D.mapa.construccion_horas_por_parcela=.5;D.cultivo.horas=8;D.serie={...D.serie,base:1,por_nivel:0,por_piso:0,tope:1};}
+  if(MODO==='prueba'){D.reloj.rapido_horas_por_hora_real=48;D.mapa.construccion_horas_por_parcela=.5;D.cultivo.horas=8;}   /* la serie de juegos queda completa también en la prueba (Luis, 19 nov) */
 }catch(err){carga.innerHTML='<p style="color:#fff;padding:24px;font:500 15px Inter,sans-serif">No se pudo cargar el prototipo: '+err.message+'</p>';return;}
 
 /* ====================================================================================================
@@ -1255,7 +1255,7 @@ function abrirDev(){cerrarDev();devEl=h('div','dev');app.append(devEl);let segur
       <div class="fila"><button data-r="rapido" aria-pressed="${est.reloj.tipo==='rapido'}">Reloj rápido (1 día = 10 min)</button><button data-r="real" aria-pressed="${est.reloj.tipo==='real'}">Reloj real</button></div>
       <div class="fila"><button data-a="1">+1 h</button><button data-a="6">+6 h</button><button data-a="24">+1 día</button></div>
       <div class="fila"><button data-m="prueba" aria-pressed="${MODO==='prueba'}">Modo prueba de un día</button><button data-m="normal" aria-pressed="${MODO!=='prueba'}">Ritmo normal</button></div>
-      <p>${MODO==='prueba'?'Un día = 30 min, el cultivo tarda 8 h de juego, cada parcela nueva media hora y un juego por siembra y por cosecha. Entra cada ~30 min.':'Los números de datos.json: un día = 10 min, cultivo de 24 h, series de 3 o más.'}</p>
+      <p>${MODO==='prueba'?'Un día = 30 min, el cultivo tarda 8 h de juego, cada parcela nueva media hora y series de 3 o más juegos por siembra y por cosecha. Entra cada ~30 min.':'Los números de datos.json: un día = 10 min, cultivo de 24 h, series de 3 o más.'}</p>
       <div class="fila"><button data-s="1">Un suceso extraño</button><span style="align-self:center;color:var(--suave);font-size:13px">Vistos: ${Object.keys(SUCESOS_VISTOS).length} de ${Object.keys(SUCESOS).length}</span></div>
       <div class="fila"><button data-x="cero">${seguro?'¿Seguro? Toca otra vez':'Empezar de cero'}</button><button data-x="cerrar">Cerrar</button></div>`;};
   pinta();
