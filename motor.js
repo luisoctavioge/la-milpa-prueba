@@ -190,13 +190,20 @@
     return { ok: true, ceniza: p.ceniza, era };
   }
 
-  function sembrar(datos, est, pos) {
+  // Semillas (Luis, 19 nov): la PRIMERA siembra no se elige (su parcela siembra el maíz de su rumbo). Desde la segunda,
+  // siempre eliges: las 4 iniciales (rojo, blanco, negro, amarillo), la última mazorca de esa parcela ('ultima') o una
+  // semilla guardada (índice). Las parcelas de los rumbos ya no siembran fijo su maíz.
+  function sembrar(datos, est, pos, semilla) {
     const p = est.parcelas[pos];
     if (!p || p.estado !== 'vacia') return error('no está lista para sembrar');
-    if (p.segura) p.lote = loteAComp(MM.loteRumbo(p.rumbo, est.jugador));
-    else if (typeof p.semillaElegida === 'string') p.lote = loteAComp(MM.loteRumbo(p.semillaElegida, est.jugador)); // semilla de un rumbo
-    else if (p.semillaElegida != null && est.semillas[p.semillaElegida]) p.lote = est.semillas[p.semillaElegida].lote;
-    else if (p.ultima) p.lote = semillaDeComp(p.ultima); // resiembra de su última mazorca
+    const s = semilla !== undefined && semilla !== null ? semilla : p.semillaElegida;
+    const esRumbo = x => typeof x === 'string' && Object.values(datos.mapa.seguras).includes(x);
+    if (est.contadores.siembras === 0) p.lote = loteAComp(MM.loteRumbo(p.rumbo || 'amarillo', est.jugador));
+    else if (esRumbo(s)) p.lote = loteAComp(MM.loteRumbo(s, est.jugador)); // una de las 4 iniciales
+    else if (s === 'ultima' && p.ultima) p.lote = semillaDeComp(p.ultima); // resiembra de su última mazorca
+    else if (typeof s === 'number' && est.semillas[s]) p.lote = est.semillas[s].lote;
+    else if (p.ultima) p.lote = semillaDeComp(p.ultima);
+    else if (p.rumbo) p.lote = loteAComp(MM.loteRumbo(p.rumbo, est.jugador));
     p.semillaElegida = null;
     p.estado = 'creciendo'; p.t = 0; p.lluvias = 0; p.crecido = 0;
     est.contadores.siembras++; evento(est, 'siembra', { pos });
@@ -221,12 +228,12 @@
     return { ok: true, indice: est.semillas.length - 1 };
   }
   function quitarSemilla(datos, est, i) { est.semillas.splice(i, 1); Object.values(est.parcelas).forEach(p => { if (typeof p.semillaElegida !== 'number') return; if (p.semillaElegida === i) p.semillaElegida = null; else if (p.semillaElegida > i) p.semillaElegida--; }); return { ok: true }; }
-  // Arrastrar una semilla sobre parcelas: queda marcada para su siguiente siembra (las seguras siempre siembran su rumbo).
+  // Arrastrar una semilla sobre parcelas: queda marcada para su siguiente siembra (al sembrar sale ya escogida).
   // i = índice de una semilla guardada, o el nombre de un rumbo ('rojo', 'blanco', 'negro', 'amarillo').
   function elegirSemilla(datos, est, i, posiciones) {
     const esRumbo = typeof i === 'string' && Object.values(datos.mapa.seguras).includes(i);
     if (!esRumbo && !est.semillas[i]) return error('no hay esa semilla');
-    const marcadas = posiciones.filter(pos => est.parcelas[pos] && !est.parcelas[pos].segura);
+    const marcadas = posiciones.filter(pos => est.parcelas[pos]);
     marcadas.forEach(pos => (est.parcelas[pos].semillaElegida = i));
     return { ok: true, marcadas };
   }
