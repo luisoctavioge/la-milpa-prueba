@@ -308,6 +308,11 @@ button.maz{background:rgba(127,127,127,.13)}
 .dev button{border:1.5px solid var(--suave);border-radius:999px;padding:9px 14px;font:600 14px var(--body);color:var(--tinta)}
 .dev button[aria-pressed="true"]{background:var(--tinta);color:var(--solida);border-color:var(--tinta)}
 .dev p{margin:0;color:var(--suave);font-size:13px}
+/* el reloj de 24 h (Luis, 19 nov): mediodía arriba, medianoche abajo; la manecilla da una vuelta por día */
+#reloj{position:absolute;right:calc(var(--u)*10);bottom:calc(env(safe-area-inset-bottom,0px) + var(--u)*6);z-index:8;display:flex;align-items:center;gap:calc(var(--u)*5);pointer-events:none;
+  color:#FFFFFF;font:400 calc(var(--u)*13)/1 "Pixelify Sans",monospace;text-shadow:1px 0 0 #000,-1px 0 0 #000,0 1px 0 #000,0 -1px 0 #000}
+#reloj svg{width:calc(var(--u)*30);height:calc(var(--u)*30);display:block;shape-rendering:crispEdges;filter:drop-shadow(1px 0 0 #000) drop-shadow(-1px 0 0 #000) drop-shadow(0 1px 0 #000) drop-shadow(0 -1px 0 #000)}
+#reloj .dia{display:block;font-size:calc(var(--u)*10);opacity:.85;margin-top:calc(var(--u)*2)}
 #reiniciar{position:absolute;left:calc(var(--u)*10);bottom:calc(env(safe-area-inset-bottom,0px) + var(--u)*6);z-index:8;padding:calc(var(--u)*4) calc(var(--u)*8);
   font:400 calc(var(--u)*11)/1 "Pixelify Sans",monospace;color:#FFFFFF;background:rgba(10,16,12,.55);opacity:.75;
   text-shadow:1px 0 0 #000,-1px 0 0 #000,0 1px 0 #000,0 -1px 0 #000}
@@ -366,6 +371,7 @@ button.maz{background:rgba(127,127,127,.13)}
   <div id="marcas"></div>
   <div id="ui"></div>
   <div id="calor"></div>
+  <div id="reloj" aria-hidden="true"></div>
   <button id="reiniciar" type="button" aria-label="reiniciar todo desde cero (solo para la prueba)">Reiniciar</button>
   <div id="carga"><span></span></div>
 </div>
@@ -622,7 +628,7 @@ function ir(tipo,d={},o={}){
   juegoId++;cerrarDev();
   if(capa){const vieja=capa;vieja.querySelectorAll('button,.t').forEach(x=>x.style.pointerEvents='none');salir(vieja,dur);}
   pant={tipo,d};
-  {const rb=document.getElementById('reiniciar');if(rb)rb.hidden=!['monte','parcela','troje'].includes(tipo);}   /* el botón de la prueba no tapa los juegos */
+  {const vis=['monte','parcela','troje'].includes(tipo);for(const id of ['reiniciar','reloj']){const x=document.getElementById(id);if(x)x.hidden=!vis;}}   /* ni el botón de la prueba ni el reloj tapan los juegos */   /* el botón de la prueba no tapa los juegos */
   if(!de)Object.assign(cam,camDe(tipo,d));else moverCam(camDe(tipo,d),dur,o.atras?easeInOut:easeOut);
   const r=construir(tipo,d);capa=r.el;actualizarCapa=r.act||null;ui.appendChild(capa);if(de)entrar(capa,dur);
   if(actualizarCapa)actualizarCapa(true);
@@ -1276,7 +1282,20 @@ function revisarSucesos(){const ahora=performance.now();
   if(sucesoActual&&!SUCESO&&!EVENTO){if(!SUCESOS_VISTOS[sucesoActual]){SUCESOS_VISTOS[sucesoActual]=Date.now();ls.set('milpa.prototipo.sucesos',JSON.stringify(SUCESOS_VISTOS));}sucesoActual=null;proxSuceso=ahora+45000+Math.random()*60000;}
   if(!SUCESO&&!EVENTO&&!sucesoActual&&ahora>proxSuceso&&(pant.tipo==='monte'||pant.tipo==='parcela')&&!document.hidden){if(!lanzarSuceso())proxSuceso=ahora+20000;}}
 let forzarPintar=false;
-function tic(){const ahora=Date.now();MilpaMotor.avanzar(D,est,ahora);revisarSucesos();
+/* el reloj: una carátula de 24 h en píxel y la hora en números */
+let relojClave='';
+function pintarReloj(){const el=document.getElementById('reloj');if(!el)return;
+  const total=MilpaMotor.horaDeJuego(est,Date.now()),h=((total%24)+24)%24,dia=Math.floor(total/24)+1,hh=Math.floor(h),mm=Math.floor((h-hh)*60);
+  const clave=hh+':'+Math.floor(mm/5)+'|'+dia;if(clave===relojClave)return;relojClave=clave;
+  const pos=(hr,r)=>{const a=(hr-12)/24*Math.PI*2;return[12+Math.sin(a)*r,12-Math.cos(a)*r];};
+  const px=(x,y,c,s=2)=>`<rect x="${(x-s/2).toFixed(1)}" y="${(y-s/2).toFixed(1)}" width="${s}" height="${s}" fill="${c}"/>`;
+  let s='';for(let k=0;k<48;k++){const [x,y]=pos(k/2,10);s+=px(x,y,'#FFFFFF',1.6);}            /* el aro */
+  for(const hr of D.lluvia.horas){const [x,y]=pos(hr,7.4);s+=px(x,y,'#5AA8EA',2.2);}         /* las horas de la lluvia */
+  {const [x,y]=pos(0,7.4);s+=px(x,y,'#FFFFFF',1.6);}                                          /* medianoche, abajo */
+  for(let k=1;k<=5;k++){const [x,y]=pos(h,k*1.15);s+=px(x,y,'#FFFFFF',1.8);}                 /* la manecilla */
+  const dia_=h>=6&&h<19,[sx,sy]=pos(h,7.4);s+=px(sx,sy,dia_?'#F2C230':'#E8ECF5',4);           /* sol o luna en la punta */
+  el.innerHTML=`<svg viewBox="0 0 24 24">${s}</svg><span>${hh}:${String(mm).padStart(2,'0')}<span class="dia">día ${dia}</span></span>`;}
+function tic(){const ahora=Date.now();MilpaMotor.avanzar(D,est,ahora);revisarSucesos();pintarReloj();
   if(firmaMundo()!==firmaG){if(camTr)regenPendiente=true;else regenerar();}
   revisarBordes();
   if(actualizarCapa)actualizarCapa(false);
