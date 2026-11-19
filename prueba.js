@@ -1,6 +1,7 @@
 /* La Milpa · la prueba con amigos (docs/milpa-plan-lanzamiento.md §10–§12). No es parte del juego.
    - La ronda llega por el enlace: #ronda-a (un día, modo prueba) o #ronda-b (una semana, ritmo normal y reloj real).
      También ?ronda=a|b (para la app instalada en la pantalla de inicio). #luis quita el modo amigo en ese navegador.
+     Sin nada en el enlace, un jugador nuevo de la página publicada entra a la ronda A (un solo link para compartir).
    - En modo amigo se esconden Reiniciar y el botón ⋯ del panel, y aparece "Tu opinión".
    - Lleva un registro sin datos personales (sesiones, juegos y cuánto tardó cada uno) y hace las preguntas del §11.
    - La opinión se manda a Luis con el menú de compartir del teléfono, o se copia. No hay servidor.
@@ -8,7 +9,7 @@
 (function(){
 'use strict';
 const ls={get(k){try{return localStorage.getItem(k);}catch(e){return null;}},set(k,v){try{localStorage.setItem(k,v);}catch(e){}},del(k){try{localStorage.removeItem(k);}catch(e){}}};
-const K={ronda:'milpa.prueba.ronda',reg:'milpa.prueba.registro'};
+const K={ronda:'milpa.prueba.ronda',reg:'milpa.prueba.registro',luis:'milpa.prueba.luis'};
 
 /* ---------- la ronda, desde el enlace ---------- */
 function leerEnlace(){
@@ -21,8 +22,12 @@ const enlace=leerEnlace();
 function fijarRonda(r){
   ls.set(K.ronda,r);
   ls.set('milpa.prototipo.modo',r==='a'?'prueba':'normal');}
-if(enlace==='a'||enlace==='b')fijarRonda(enlace);
-else if(enlace==='luis')ls.del(K.ronda);
+if(enlace==='a'||enlace==='b'){fijarRonda(enlace);ls.del(K.luis);}
+else if(enlace==='luis'){ls.del(K.ronda);ls.set(K.luis,'1');}
+/* un solo link (Luis, 19 nov): en la página publicada, quien llega por primera vez (sin milpa guardada) entra a la
+   ronda A. Quien ya jugaba antes (Luis) no cambia, y dentro del Artifact no se aplica. */
+const enArtifact=/claude/i.test(location.hostname);
+if(!enlace&&!enArtifact&&!ls.get(K.ronda)&&!ls.get(K.luis)&&!ls.get('milpa.prototipo.v1'))fijarRonda('a');
 let ronda=ls.get(K.ronda);   /* 'a' | 'b' | null */
 const RELOJ={a:'rapido',b:'real'};
 const NOMBRE={a:'ronda A, un día',b:'ronda B, una semana'};
