@@ -1,0 +1,80 @@
+{
+  "_nota": "La Milpa · todo el balance del ciclo (decidido en docs/milpa-flujo.md, rondas 6 a 11). Las horas son horas DE JUEGO. Nada de esto va escrito en el motor.",
+
+  "reloj": {
+    "rapido_horas_por_hora_real": 144,
+    "_rapido": "1 día de juego = 10 minutos reales. Se prueba primero así; luego el reloj real (1).",
+    "real_horas_por_hora_real": 1,
+    "paso_minutos": 5,
+    "ausencia_max_dias": 30,
+    "_ausencia": "Si faltas más de 30 días de juego, solo se procesan 30: para entonces todo ya llegó a su estado final.",
+    "inicio_hora_rapido": 6,
+    "estaciones": 4,
+    "dias_por_estacion": 7,
+    "epoca_estaciones": "2026-01-05",
+    "_estaciones": "Iguales para todos: con reloj real, la estación sale de la fecha desde la época. Con reloj rápido, de los días de juego."
+  },
+
+  "lluvia": { "horas": [6, 12, 18], "espera_max": 2, "max_por_cultivo": 3 },
+
+  "cultivo": {
+    "horas": 24,
+    "lista_sin_perder": 24,
+    "pierde_grado_cada": 12,
+    "marchita": 72,
+    "podrida_tras_marchita": 48,
+    "vacia_sin_efecto": 24,
+    "vacia_a_podrida": 96,
+    "perdida_tras_podrida": 168
+  },
+
+  "calidad": { "nombres": ["pobre", "buena", "excelente"], "medidor": [0, 1, 2], "bono_mazorcas": [0, 1, 2] },
+
+  "nivel": { "max": 4, "medidor": [3, 6, 9] },
+
+  "ceniza": { "cosechas": 3 },
+
+  "serie": {
+    "_nota": "Cada siembra (Escribe) y cada cosecha (Arreglo) es una SERIE de juegos, no uno solo (Luis, 19 nov): al menos 3 y uno más por cada nivel de la parcela y por cada piso de la troje, con tope. juegos = base + (nivel − 1) + (piso − 1), hasta tope. La práctica usa la base. La Lluvia y la Quema son un solo juego.",
+    "base": 3,
+    "por_nivel": 1,
+    "por_piso": 1,
+    "tope": 7
+  },
+
+  "mapa": {
+    "columnas": 3, "filas": 5, "troje": "1,2",
+    "seguras": { "1,1": "blanco", "2,2": "rojo", "1,3": "amarillo", "0,2": "negro" },
+    "orden": ["1,1", "2,2", "1,3", "0,2", "0,1", "2,1", "0,3", "2,3", "0,0", "1,0", "2,0", "0,4", "1,4", "2,4"],
+    "construccion_horas_por_parcela": 6,
+    "_construccion": "La parcela n tarda (n − 1) × 6 h. Condición: todas en orden y una buena cosecha cada una desde la última."
+  },
+
+  "troje": {
+    "pisos": [20, 400, 8000, 160000],
+    "estante": 20,
+    "semillas_guardadas": 6,
+    "versiones": ["casa maya y ch'iil", "adobe y teja", "lámina y veleta", "el ch'iil solo", "cuexcomate"]
+  },
+
+  "maiz": { "polen_por_surco_vecino": 0.12, "polen_max": 0.5 },
+
+  "aprendizaje": {
+    "_nota": "La primera vez (docs/milpa-flujo.md §3 y la navegación): sin menú de entrada; se empieza dentro de la parcela 1 sembrando; llega la lluvia, la cosecha y la troje; al guardar la primera cosecha la cámara se aleja y aparece el monte. Los cinco ajustes de docs/milpa-flujo.md §18.2 están decididos.",
+    "lluvia_inicial": 1,
+    "parcela_inicial_con_ceniza": true,
+    "_parcela_inicial": "Decidido: la primera parcela ya viene quemada (roza, tumba y quema), así la primera cosecha, con una sola lluvia, sale buena y enseña el ciclo sin castigo.",
+    "primer_cultivo_horas": 0.05,
+    "primera_siembra_metas": [7, 3, 11],
+    "_primera_siembra": "La primera siembra del jugador nuevo siempre pide estos tres números (en el piso 1).",
+    "_primer_cultivo": "Decidido: el primer cultivo madura en ~3 minutos de juego (como el trigo de Hay Day, que tarda 2 minutos), para ver el ciclo entero en la primera sesión. Solo el primero; desde el segundo, 24 h.",
+    "secciones_troje": {
+      "hoy": "primera_cosecha",
+      "la_cuenta": "primera_cosecha",
+      "las_mazorcas": "primera_cosecha",
+      "tu_troje": "primera_cosecha",
+      "las_semillas": "segunda_parcela",
+      "la_practica": "piso_2"
+    }
+  }
+}
