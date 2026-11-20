@@ -265,8 +265,12 @@ button.maz{background:rgba(127,127,127,.13)}
 .sacude{animation:sacude .36s}
 @keyframes sacude{20%{transform:translateX(calc(var(--u)*-7))}40%{transform:translateX(calc(var(--u)*6))}60%{transform:translateX(calc(var(--u)*-4))}80%{transform:translateX(calc(var(--u)*2))}}
 .rastro{position:absolute;top:50%;height:calc(var(--u)*14);margin-top:calc(var(--u)*-7);border-radius:99px;background:rgba(255,255,255,.45);pointer-events:none}
-.leyenda{flex:none;height:calc(var(--u)*60);padding:0 calc(var(--u)*22);border-radius:calc(var(--u)*24);gap:calc(var(--u)*18)}
-.leyenda .barra{width:calc(var(--u)*76);height:calc(var(--u)*18)}
+.leyenda{flex:none;height:calc(var(--u)*60);padding:0 calc(var(--u)*14);border-radius:calc(var(--u)*24);gap:calc(var(--u)*11);max-width:calc(100% - var(--u)*8)}
+.leyenda .barra{width:calc(var(--u)*56);height:calc(var(--u)*18)}
+.leyenda .borrar{display:flex;align-items:center;gap:calc(var(--u)*4);background:none;border:0;padding:calc(var(--u)*4) calc(var(--u)*2);color:inherit;font:inherit;cursor:pointer}
+.leyenda .borrar .ico{width:calc(var(--u)*18);height:calc(var(--u)*18)}
+.leyenda .borrar .txt{font-size:calc(var(--u)*13)}
+.leyenda .borrar.apagado{opacity:.35}
 .leyenda .txt{white-space:nowrap;font-size:calc(var(--u)*15)}
 .gesto{display:flex;align-items:center;gap:calc(var(--u)*8)}
 .pista{position:absolute;left:50%;top:50%;width:calc(var(--u)*36);height:calc(var(--u)*36);margin:calc(var(--u)*-18) 0 0 calc(var(--u)*-18);border-radius:50%;
@@ -1023,8 +1027,11 @@ function juegoSiembra(raiz,{metas,F,pista,ayuda},fin,salirJ,vivo){
   raiz.classList.add('siembra');
   const top=h('div','j-top con-instr');top.append(btnVolver(salirJ,''));const meta=h('div','placa meta');
   const av=h('div','avance'),pisosEl=h('div','pisos'),zona=h('div','zona');zona.style.setProperty('--alto-piso',`calc(var(--u)*${[150,150,128,104][F]||104})`);
-  const instr=h('p','instr','Toca el surco: un grano. Desliza de lado: una barra.'+(F>1?' Cada piso de arriba vale 20 veces más.':'')+(ayuda?' Para quitar, mantén el dedo encima.':''));
-  const ley=h('div','placa leyenda',`<div class="gesto"><span class="pz grano"></span><span class="txt">= 1</span></div><span class="sep"></span><div class="gesto"><span class="pz barra"></span><span class="txt">= 5</span></div>`);
+  const instr=h('p','instr','Toca el surco: un grano. Desliza de lado: una barra.'+(F>1?' Cada piso de arriba vale 20 veces más.':'')+(ayuda?' ¿Te equivocaste? Toca Borrar.':''));
+  const ley=h('div','placa leyenda',`<div class="gesto"><span class="pz grano"></span><span class="txt">= 1</span></div><span class="sep"></span><div class="gesto"><span class="pz barra"></span><span class="txt">= 5</span></div><span class="sep"></span>`);
+  /* Borrar (Luis, 20 nov): deshace lo último que pusiste, una vez por toque (también deshace la cascada que provocó) */
+  const hist=[],btnBorrar=boton('borrar',svgI(IC.quitar(),'ico')+'<span class="txt">Borrar</span>','borrar lo último que pusiste',()=>{if(busy||!hist.length)return;f=hist.pop();fx={};dibujar();});
+  ley.append(btnBorrar);
   top.append(instr);zona.append(meta,av,pisosEl);
   raiz.append(top,zona,ley);   /* la explicación arriba; la meta y lo que llevas, justo encima del surco */
   let k=0,f=relleno([],F),busy=false,fx={};const cola=[],pisos=[];
@@ -1032,18 +1039,19 @@ function juegoSiembra(raiz,{metas,F,pista,ayuda},fin,salirJ,vivo){
   let pistaEl=null;if(pista&&!QUIETO){pistaEl=h('span','pista');pisos[0].el.append(pistaEl);}
   function dibujar(){meta.innerHTML=`<small>Siembra</small><b>${fmtN(metas[Math.min(k,metas.length-1)])}</b><span class="llevas">llevas ${fmtN(valor(f))}</span>`;
     av.innerHTML=metas.length>1?metas.map((_,j)=>`<i class="${j<k?'on':''}"></i>`).join(''):'';
-    let tp=-1;f.forEach((p,i)=>{if(p.b+p.d>0)tp=i;});pisos.forEach((P,i)=>{P.c.innerHTML=contenido(f[i],i,tp,fx);});}
+    let tp=-1;f.forEach((p,i)=>{if(p.b+p.d>0)tp=i;});pisos.forEach((P,i)=>{P.c.innerHTML=contenido(f[i],i,tp,fx);});
+    btnBorrar.classList.toggle('apagado',!hist.length);}
   function gesto(i,t){if(k>=metas.length)return;if(t[0]==='-'&&!busy&&f[i][t[1]]===0)return;if(pistaEl){pistaEl.remove();pistaEl=null;}cola.push([i,t]);correr();}
   async function correr(){if(busy)return;busy=true;
     while(cola.length){const [i,t]=cola.shift();
-      if(t[0]==='-'){if(f[i][t[1]]>0)f[i][t[1]]--;fx={};dibujar();continue;}
-      f[i][t]++;fx={pop:{i,t}};dibujar();
+      if(t[0]==='-'){if(f[i][t[1]]>0){hist.push(f.map(p=>({...p})));f[i][t[1]]--;}fx={};dibujar();continue;}
+      hist.push(f.map(p=>({...p})));f[i][t]++;fx={pop:{i,t}};dibujar();
       await cascada(f,x=>{fx=x;dibujar();});if(!vivo())return;}
     busy=false;fx={};dibujar();
     const T=metas[k],v=valor(f);
     if(v===T){pisos.forEach(P=>P.el.classList.add('ok'));meta.classList.add('bien');await dormir(650);if(!vivo())return;
       pisos.forEach(P=>P.el.classList.remove('ok'));meta.classList.remove('bien');k++;
-      if(k>=metas.length){fin({});return;}f=relleno([],F);dibujar();}
+      if(k>=metas.length){fin({});return;}f=relleno([],F);hist.length=0;dibujar();}
     else if(v>T){meta.classList.remove('sacude');void meta.offsetWidth;meta.classList.add('sacude');}}
   dibujar();}
 
