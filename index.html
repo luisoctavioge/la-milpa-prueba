@@ -330,7 +330,7 @@ button.maz{background:rgba(127,127,127,.13)}
 
 /* ===== la interfaz en píxel (Luis, 19 nov; docs/milpa-estetica.md §27–§28) =====
    Base A: placas de píxel con contorno de 1 píxel del mundo y una franja de sombra abajo (juegos, troje, secciones).
-   D en el monte (y en la parcela y llevar semilla): marcas oscuras sobre el mundo, sin placas blancas. Todo en Pixelify Sans. */
+   D en el monte (y en la parcela): marcas oscuras sobre el mundo, sin placas blancas. Todo en Pixelify Sans. */
 #app{--p:calc(var(--u)*1.6667);--display:"Silkscreen","Pixelify Sans","Archivo",monospace;--body:"Silkscreen","Pixelify Sans","Inter",monospace;font-family:"Silkscreen","Pixelify Sans",monospace;--borde:#18201A;--bajo:rgba(0,0,0,.12)}
 #app *{border-radius:0!important;font-synthesis:none}
 #app,#app *{font-weight:400!important}   /* desde 500, la "C" de Pixelify se cierra (parece "O") y el 5 parece S: la jerarquía va por tamaño */
@@ -601,7 +601,7 @@ function moverCam(a,dur,ease){camTr={de:{...cam},a,t0:performance.now(),dur,ease
 function vistaDe(c){const alto=Math.min(H,c.w*appH/appW);const x=Math.max(0,Math.min(W-c.w,c.cx-c.w/2)),y=Math.max(0,Math.min(H-alto,c.cy-alto*c.fy));return{x,y,w:c.w,h:alto,esc:appW/c.w};}
 function camDe(tipo,d){
   const mw=Math.min(W,H*appW/appH);const monte={cx:W/2,cy:H/2,w:mw,fy:.5,osc:0,bor:0};
-  if(tipo==='monte'||tipo==='semilla')return monte;
+  if(tipo==='monte')return monte;
   if(tipo==='parcela'){const s=G.slots[slotDe(d.pos)];return{cx:s.x,cy:s.y,w:Math.min(mw,92),fy:.46,osc:0,bor:0};}
   if(tipo==='troje'||tipo==='seccion'){const s=G.slots[TROJE];return{cx:s.x,cy:s.y,w:Math.min(mw,96),fy:.46,osc:0,bor:0};}
   if(tipo==='juego'){if(d.pos){const s=G.slots[slotDe(d.pos)];return{cx:s.x,cy:s.y,w:Math.min(mw,70),fy:.5,osc:.5,bor:6};}
@@ -654,7 +654,7 @@ function entrar(el,dur){
     else x.animate([{opacity:0,transform:`translateY(${16*U}px)`},{opacity:1,transform:'none'}],{duration:dur*.6,delay:dur*.4,easing:DECEL,fill:'backwards'});}}
 function atras(){const t=pant.tipo,d=pant.d;
   if(t==='parcela'){if(est.visto.monte)ir('monte',{},{atras:true});}
-  else if(t==='troje'||t==='semilla')ir('monte',{},{atras:true});
+  else if(t==='troje')ir('monte',{},{atras:true});
   else if(t==='seccion')ir('troje',{},{atras:true});
   else if(t==='juego'){if(d.practica)ir('seccion',{s:'la_practica'},{atras:true});else if(d.pos)ir('parcela',{pos:d.pos},{atras:true});else ir('monte',{},{atras:true});}}
 const btnVolver=(fn,cls='arriba izq')=>boton('placa redonda volver '+cls,svgI(IC.volver()),'volver',fn);
@@ -664,7 +664,6 @@ function construir(tipo,d){
   if(tipo==='juego')return capaJuego(d);
   if(tipo==='troje')return capaTroje();
   if(tipo==='seccion')return capaSeccion(d);
-  if(tipo==='semilla')return capaSemilla();
   return{el:h('div','capa')};}
 
 /* ---------- textos (paso 6): voz clara, de tú; dicen qué pasa y qué hacer ---------- */
@@ -740,7 +739,7 @@ function estadoParcela(p,obra){
   return{ico:svgI(ico,col),tit,sub:p.segura?nombreParcela(p):'',chips,guia};}
 function estadoParcelaHTML(e){if(!e)return '';
   return `<div class="l1">${e.ico}<span class="tit">${e.tit}</span></div>${e.sub?`<div class="sub">${e.sub}</div>`:''}${e.chips.length?`<div class="l2">${e.chips.map(c=>`<span class="chip">${c}</span>`).join('')}</div>`:''}`;}
-function semillaParaSembrar(p){if(est.contadores.siembras===0)return MilpaMaiz.COLOR[p.rumbo||'amarillo'];if(p.semillaElegida!=null)return colorSemilla(p.semillaElegida);if(p.ultima)return colorDeTipo(p.ultima.tipo);return MilpaMaiz.COLOR.amarillo;}
+function semillaParaSembrar(p){if(est.contadores.siembras===0)return MilpaMaiz.COLOR[p.rumbo||'amarillo'];if(p.ultima)return colorDeTipo(p.ultima.tipo);return MilpaMaiz.COLOR.amarillo;}
 function accionesParcela(pos){
   const p=est.parcelas[pos];if(!p)return[];const primera=est.contadores.cosechas===0,ll=primera?' llama':'';const L=[];
   const accion=(k,html,label,fn,cls='')=>L.push({k,el:boton('placa accion'+cls,html,label,fn)});
@@ -758,7 +757,7 @@ function elegirParaSembrar(pos){
   const opc=RUMBOS.map(r=>({id:r,col:MilpaMaiz.COLOR[r],nom:r,label:'maíz '+r}));
   if(p.ultima)opc.push({id:'ultima',col:colorDeTipo(p.ultima.tipo),nom:'la de aquí',label:'la última mazorca de esta parcela'});
   est.semillas.forEach((s,i)=>opc.push({id:i,col:colorDeTipo(s.muestra),nom:s.muestra.split(' ')[0],label:nombreMaiz(s.muestra)}));
-  const pre=p.semillaElegida!=null?p.semillaElegida:(p.ultima?'ultima':null);
+  const pre=p.ultima?'ultima':null;
   opc.forEach(o=>{const b=boton('sem-c',`<div class="sem">${semillaSVG(o.col)}</div><span class="sub">${o.nom}</span>`,'sembrar '+o.label,()=>{v.remove();ir('juego',{tipo:'siembra',pos,semilla:o.id});});
     if(o.id===pre)b.setAttribute('aria-pressed','true');g.append(b);});
   caja.append(h('span','tit','¿Con qué semilla?'),h('span','sub',est.semillas.length?'Las 4 iniciales, la de esta parcela y las que guardaste.':'Las 4 iniciales'+(p.ultima?' o la de esta parcela':'')+'. Guarda más desde Las mazorcas.'),g,
@@ -895,13 +894,12 @@ const SECCION={
   pinta();return{act(forzar){if(forzar)pinta();}};},
  las_semillas(cont,pie){
   const pinta=()=>{const g=h('div','semis');
-    RUMBOS.forEach(r=>g.append(h('div','sem-c',`<div class="sem">${semillaSVG(MilpaMaiz.COLOR[r])}</div><span class="sub">${RUMBO[r].charAt(0).toUpperCase()+RUMBO[r].slice(1)}</span>`)));
+    RUMBOS.forEach(r=>g.append(h('div','sem-c',`<div class="sem">${semillaSVG(MilpaMaiz.COLOR[r])}</div><span class="sub">${r}</span>`)));
     for(let i=0;i<D.troje.semillas_guardadas;i++){const s=est.semillas[i];
       if(s){const b=boton('sem-c',`<div class="sem">${semillaSVG(colorDeTipo(s.muestra))}</div><span class="sub">${s.muestra.split(' ')[0]}</span>`,nombreMaiz(s.muestra),()=>detalleSemilla(cont,i,pinta));g.append(b);}
       else g.append(h('div','sem-c',`<div class="sem vacia"></div><span class="sub">&nbsp;</span>`));}
     cont.innerHTML='';cont.append(h('p','nota',`Las 4 iniciales siempre están. Guarda hasta ${D.troje.semillas_guardadas} más desde Las mazorcas. Cada vez que siembras eliges cuál usar.`),g);};
   pinta();
-  pie.append(boton('placa accion',svgI(IC.llevar(),'ico m acc')+'<span class="tit">Llevar a las parcelas</span>','llevar semilla a las parcelas',()=>ir('semilla')));
   return{act(forzar){if(forzar)pinta();}};},
  la_practica(cont){
   const g=h('div','prac');
@@ -950,7 +948,7 @@ function detalleMazorca(cont,m){
   const caja=v.firstChild;
   if(ya)caja.append(h('span','sub','Ya es una de tus semillas.'));
   else if(!cabe)caja.append(h('span','sub',`Ya tienes ${D.troje.semillas_guardadas} semillas. Quita una en Las semillas para guardar esta.`));
-  else{const b=boton('placa accion',svgI(IC.semilla(),'ico m acc')+'<span class="tit">Guardar como semilla</span>','guardar como semilla',()=>{MilpaMotor.guardarSemilla(D,est,m);guardar();b.replaceWith(h('span','txt','Guardada. Llévala a tus parcelas desde Las semillas.'));});caja.append(b);}
+  else{const b=boton('placa accion',svgI(IC.semilla(),'ico m acc')+'<span class="tit">Guardar como semilla</span>','guardar como semilla',()=>{MilpaMotor.guardarSemilla(D,est,m);guardar();b.replaceWith(h('span','txt','Guardada. Elígela cuando siembres una parcela.'));});caja.append(b);}
   caja.append(h('span','sub','Toca fuera para cerrar'));
   v.addEventListener('click',e=>{if(e.target===v)v.remove();});
   cont.closest('.seccion').append(v);}
@@ -972,45 +970,13 @@ function miniTroje(id,piso,hv){
     const d2=Math.hypot(xx-R+.5,yy-R+.5)/R;const i=(yy*n+xx)*4;im.data[i]=col[0];im.data[i+1]=col[1];im.data[i+2]=col[2];im.data[i+3]=d2<1?255:0;}
   x.putImageData(im,0,0);return c;}
 
-/* ---------- llevar semilla: la bandeja abajo y el trazo del dedo sobre el monte ---------- */
-let arrastre=null,elegida=null;
-function capaSemilla(){
-  const el=h('div','capa semilla d-skin');el.append(btnVolver(atras));
-  const svgT=document.createElementNS('http://www.w3.org/2000/svg','svg');svgT.setAttribute('class','trazo');const camino=document.createElementNS('http://www.w3.org/2000/svg','path');
-  camino.setAttribute('fill','none');camino.setAttribute('stroke','#FFFFFF');camino.setAttribute('stroke-width',String(5*U));camino.setAttribute('stroke-linecap','round');camino.setAttribute('stroke-linejoin','round');camino.setAttribute('stroke-dasharray',`${2*U} ${10*U}`);
-  svgT.append(camino);el.append(svgT);
-  const di=h('div','placa dicho alto t','Arrastra una semilla desde abajo sobre las parcelas: la sembrarán la próxima vez. Las parcelas del rumbo siembran siempre su maíz.');
-  el.append(di);
-  const band=h('div','placa abajo centro t');band.style.cssText='padding:calc(var(--u)*12) calc(var(--u)*14);border-radius:calc(var(--u)*26);gap:calc(var(--u)*8)';
-  el.append(band);elegida=null;
-  const ids=[...RUMBOS,...est.semillas.map((_,i)=>i)];
-  ids.forEach((sid,k)=>{const b=h('button','sem',semillaSVG(colorSemilla(sid)));b.type='button';b.setAttribute('aria-label',typeof sid==='string'?'maíz '+sid:nombreMaiz(est.semillas[sid].muestra));b.style.pointerEvents='auto';
-    if(k===RUMBOS.length)band.append(h('span','sep'));
-    b.addEventListener('pointerdown',e=>empezarArrastre(sid,e,b,camino,band,di));band.append(b);});
-  return{el};}
-function empezarArrastre(sid,e,b,camino,band,di){
-  e.preventDefault();const r=app.getBoundingClientRect();
-  arrastre={sid,pts:[[e.clientX-r.left,e.clientY-r.top]],marcadas:new Set(),x0:e.clientX,y0:e.clientY,movio:false};
-  camino.setAttribute('viewBox',`0 0 ${appW} ${appH}`);camino.parentNode.setAttribute('viewBox',`0 0 ${appW} ${appH}`);camino.style.opacity='1';
-  const mover=ev=>{if(!arrastre)return;const x=ev.clientX-r.left,y=ev.clientY-r.top;if(Math.hypot(ev.clientX-arrastre.x0,ev.clientY-arrastre.y0)>10)arrastre.movio=true;
-    arrastre.pts.push([x,y]);camino.setAttribute('d','M'+arrastre.pts.map(p=>p.map(v=>v.toFixed(1)).join(',')).join(' L'));
-    const s=slotEn(ev.clientX,ev.clientY);if(s>=0&&s!==TROJE){const pos=posDe(s),p=est.parcelas[pos];if(p)arrastre.marcadas.add(pos);}};
-  const soltar=()=>{window.removeEventListener('pointermove',mover);window.removeEventListener('pointerup',soltar);window.removeEventListener('pointercancel',soltar);
-    const a=arrastre;arrastre=null;if(!a)return;
-    if(!a.movio){elegida=elegida===sid?null:sid;band.querySelectorAll('.sem').forEach(x=>x.classList.remove('on'));if(elegida!==null)b.classList.add('on');
-      di.textContent=elegida!==null?'Ahora toca las parcelas donde quieres sembrarla.':'Arrastra una semilla desde abajo sobre las parcelas: la sembrarán la próxima vez.';}
-    else if(a.marcadas.size){MilpaMotor.elegirSemilla(D,est,a.sid,[...a.marcadas]);guardar();di.textContent=`Listo: ${pl(a.marcadas.size,'parcela sembrará','parcelas sembrarán')} esta semilla la próxima vez.`;}
-    else di.textContent='Las parcelas del rumbo siembran siempre su maíz. Pásala sobre las otras.';
-    camino.animate([{opacity:1},{opacity:0}],{duration:QUIETO?60:420,fill:'forwards'});};
-  window.addEventListener('pointermove',mover);window.addEventListener('pointerup',soltar);window.addEventListener('pointercancel',soltar);}
+/* (20 nov) ya no se lleva semilla a las parcelas: se elige al sembrar, en elegirParaSembrar */
 
-/* ---------- marcas sobre el mundo: la semilla elegida de cada parcela y la parcela que se construye ---------- */
+/* ---------- marcas sobre el mundo: la parcela que se construye ---------- */
 const marcasEl=new Map();
 function actualizarMarcas(v){
-  const vis=['monte','semilla','parcela'].includes(pant.tipo);marcas.style.opacity=vis?'1':'0';if(!vis)return;
+  const vis=['monte','parcela'].includes(pant.tipo);marcas.style.opacity=vis?'1':'0';if(!vis)return;
   const quiero=new Map();
-  for(const p of Object.values(est.parcelas))if(p.semillaElegida!=null)quiero.set('s'+p.pos,{pos:p.pos,html:semillaSVG(colorSemilla(p.semillaElegida)),cls:'marca'});
-  if(arrastre)for(const pos of arrastre.marcadas)quiero.set('s'+pos,{pos,html:semillaSVG(colorSemilla(arrastre.sid)),cls:'marca'});
   if(est.construyendo){const c=est.construyendo,p=1-c.falta/c.total,a=p*Math.PI*2;
     quiero.set('o'+c.pos,{pos:c.pos,cls:'marca obra',html:`<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-opacity=".25" stroke-width="3"/><path d="M12 3 A9 9 0 ${p>.5?1:0} 1 ${(12+Math.sin(a)*9).toFixed(2)} ${(12-Math.cos(a)*9).toFixed(2)}" fill="none" stroke="var(--acento)" stroke-width="3"/></svg>`,k:Math.round(p*40)});}
   for(const [k,el] of marcasEl)if(!quiero.has(k)){el.remove();marcasEl.delete(k);}
@@ -1257,8 +1223,7 @@ cv.addEventListener('wheel',e=>{if(!libreMonte())return;e.preventDefault();zoomA
 function tocarMundo(x,y){const s=slotEn(x,y);if(s<0)return;const pos=posDe(s),hay=!!est.parcelas[pos]||(est.construyendo&&est.construyendo.pos===pos);
   if(pant.tipo==='monte'){if(s===TROJE){if(est.visto.monte)ir('troje');return;}if(hay)ir('parcela',{pos});}
   else if(pant.tipo==='parcela'){if(!est.visto.monte)return;if(s===TROJE){ir('troje');return;}if(pos===pant.d.pos){atras();return;}if(hay)ir('parcela',{pos});}   /* tocar otra vez la misma parcela = alejarse */
-  else if(pant.tipo==='troje'){if(s===TROJE)atras();}   /* tocar otra vez la troje = alejarse */
-  else if(pant.tipo==='semilla'){if(elegida!==null&&est.parcelas[pos]){MilpaMotor.elegirSemilla(D,est,elegida,[pos]);guardar();}}}
+  else if(pant.tipo==='troje'){if(s===TROJE)atras();}   /* tocar otra vez la troje = alejarse */}
 window.addEventListener('keydown',e=>{if(e.key==='Escape')atras();});
 function mantener(el,fn){let t=null;el.addEventListener('pointerdown',()=>{t=setTimeout(()=>{t=null;fn();},700);});const no=()=>{if(t){clearTimeout(t);t=null;}};el.addEventListener('pointerup',no);el.addEventListener('pointerleave',no);el.addEventListener('pointercancel',no);el.addEventListener('contextmenu',e=>e.preventDefault());}
 
