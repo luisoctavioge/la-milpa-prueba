@@ -132,6 +132,7 @@
     while (est.hora < objetivo - 1e-9) {
       const h0 = est.hora, h1 = Math.min(objetivo, h0 + dt);
       for (let k = Math.floor(h0) + 1; k <= h1 + 1e-9; k++) if (datos.lluvia.horas.includes(((k % 24) + 24) % 24)) est.espera = Math.min(datos.lluvia.espera_max, est.espera + 1);
+      lluviaSola(datos, est);
       paso(datos, est, h1 - h0);
       est.hora = h1;
     }
@@ -210,7 +211,28 @@
     return { ok: true };
   }
 
-  // Una partida de Lluvias deja caer todas las que esperan sobre lo que está creciendo.
+  // La lluvia cae sola (Luis, 20 nov): la primera lluvia de cada cultivo no la provoca el jugador. Si hay una lluvia y
+  // hay matas recién sembradas (sin ninguna lluvia), cae sobre todas ellas y las arranca; las demás lluvias se quedan
+  // como la sed de la milpa, que el jugador riega.
+  function lluviaSola(datos, est) {
+    if (est.espera <= 0) return;
+    const nuevas = Object.values(est.parcelas).filter(p => p.estado === 'creciendo' && p.lluvias === 0);
+    if (!nuevas.length) return;
+    nuevas.forEach(p => (p.lluvias = 1));
+    est.espera--; evento(est, 'lluviaSola', { parcelas: nuevas.map(p => p.pos) });
+  }
+  // Regar (Luis, 20 nov): el juego de Regar sacia la sed que dejaron las lluvias en las matas que ya arrancaron.
+  // Si sale bien, cuenta como esas lluvias (más calidad); si la mata se encharca (exito = false), el agua se pierde.
+  function regar(datos, est, exito = true) {
+    if (est.espera <= 0) return error('la milpa no tiene sed');
+    const reciben = Object.values(est.parcelas).filter(p => p.estado === 'creciendo' && p.lluvias >= 1 && p.lluvias < datos.lluvia.max_por_cultivo);
+    if (!reciben.length) return error('no hay matas con sed');
+    const cayeron = est.espera;
+    if (exito) reciben.forEach(p => (p.lluvias = Math.min(datos.lluvia.max_por_cultivo, p.lluvias + cayeron)));
+    est.espera = 0; est.contadores.lluvias++; evento(est, 'riego', { cayeron, exito: !!exito });
+    return { ok: true, cayeron, exito: !!exito, parcelas: reciben.length };
+  }
+  // (antes) Una partida de Lluvias deja caer todas las que esperan sobre lo que está creciendo. Se queda para las pruebas viejas.
   function llover(datos, est) {
     if (est.espera <= 0) return error('no hay lluvia esperando');
     const reciben = Object.values(est.parcelas).filter(p => p.estado === 'creciendo' && p.lluvias < datos.lluvia.max_por_cultivo);
@@ -249,7 +271,7 @@
       else if (p.estado === 'podrida' || p.estado === 'porAbrir') lista.push({ pos: p.pos, que: 'quemar' });
       else if (p.estado === 'vacia') lista.push({ pos: p.pos, que: 'sembrar' });
     }
-    const hayCreciendo = Object.values(est.parcelas).some(p => p.estado === 'creciendo' && p.lluvias < datos.lluvia.max_por_cultivo);
+    const hayCreciendo = Object.values(est.parcelas).some(p => p.estado === 'creciendo' && p.lluvias >= 1 && p.lluvias < datos.lluvia.max_por_cultivo);   // con sed: ya arrancó con la lluvia
     return { parcelas: lista, lluvia: est.espera > 0 && hayCreciendo ? est.espera : 0, faltan: lista.length + (est.espera > 0 && hayCreciendo ? 1 : 0) };
   }
 
@@ -288,7 +310,7 @@
     if (est.contadores.cosechas === 0) {
       const p = est.parcelas[datos.mapa.orden[0]];
       if (p.estado === 'vacia') return 'sembrar';
-      if (p.estado === 'creciendo' && p.lluvias === 0) return 'llover';
+      if (p.estado === 'creciendo' && p.lluvias === 0) return 'lluvia';   // la lluvia cae sola
       if (p.estado === 'creciendo') return 'esperar';
       if (p.estado === 'lista') return 'cosechar';
     }
@@ -299,7 +321,7 @@
 
   const api = {
     crear, avanzar, cambiarReloj, estacion, horaDeJuego,
-    cosechar, quemar, sembrar, llover,
+    cosechar, quemar, sembrar, llover, regar,
     guardarSemilla, quitarSemilla, elegirSemilla, elegirTroje, marcarVisto,
     pendientes, hoy, secciones, aprendizaje, vecinosDe, juegosPorVisita,
     mazorcaDeComp, loteDeComp,

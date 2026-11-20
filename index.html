@@ -231,6 +231,67 @@ button.maz{background:rgba(127,127,127,.13)}
   --pieza:#F2C230;--brillo:#FFF1B8}
 .juego.agua{--pieza:#5AA8EA;--brillo:#DCEFFF}
 .juego.fuego{--pieza:#F07030;--brillo:#FFDDB8}
+.juego.maleza{--pieza:#8FB43E;--brillo:#E4F2BC}
+/* Cortar, Quemar y Regar (20 nov) */
+.cortar .piso .pz{cursor:pointer}
+#app .piso.falta{box-shadow:inset 0 0 0 calc(var(--p)*2) #D9542E}
+.meta.mal{background:#F2C9C4;color:#18201A}
+.fuegos,.gotas{display:flex;align-items:center;gap:calc(var(--u)*8);padding:calc(var(--u)*6) calc(var(--u)*12);flex:none}
+.fuegos .txt,.gotas .txt{font-size:calc(var(--u)*12)}
+.pips{display:flex;gap:calc(var(--u)*4)}
+.pips i{width:calc(var(--u)*10);height:calc(var(--u)*14);background:var(--pieza)}
+.pips i.no{background:rgba(127,127,127,.35)}
+.leyenda .borrar{display:flex;align-items:center;gap:calc(var(--u)*4);background:none;border:0;padding:calc(var(--u)*4) calc(var(--u)*2);color:inherit;font:inherit;cursor:pointer}
+.zona-r{justify-content:flex-start;gap:calc(var(--u)*12);padding-top:calc(var(--u)*6);overflow-y:auto}
+.matas-r{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:calc(var(--u)*8);width:100%;align-items:end}
+.mata-r{display:flex;flex-direction:column;align-items:center;gap:calc(var(--u)*6);padding:calc(var(--u)*8) calc(var(--u)*6) calc(var(--u)*10)}
+.mata-r .dib svg{width:calc(var(--u)*34);height:calc(var(--u)*46);display:block}
+.mata-r .pide{display:flex;flex-direction:column;align-items:center;line-height:1}
+.mata-r .pide small{font-size:calc(var(--u)*11);color:var(--suave)}
+.mata-r .pide b{font-size:calc(var(--u)*26)}
+.mata-r.bien{background:#DDF0D4}
+.mata-r.ahogada{background:#CFE3F5}
+.slots{display:flex;flex-direction:column;gap:calc(var(--u)*5);width:100%}
+.slot{position:relative;min-height:calc(var(--u)*58);width:100%;display:flex;align-items:center;justify-content:center;border:0;padding:calc(var(--u)*7) calc(var(--u)*3);
+  background:repeating-linear-gradient(to bottom,transparent 0 calc(var(--u)*9),rgba(0,0,0,.28) calc(var(--u)*9) calc(var(--u)*12)),#6E341A;box-shadow:inset 0 0 0 var(--p) #18201A}
+.slot .x{position:absolute;left:calc(var(--u)*4);top:calc(var(--u)*2);font-size:calc(var(--u)*9);color:#F2E6D6;opacity:.85}
+.slot.vacio{background:repeating-linear-gradient(45deg,transparent 0 calc(var(--u)*6),rgba(255,255,255,.08) calc(var(--u)*6) calc(var(--u)*9)),#3A2414;box-shadow:inset 0 0 0 var(--p) #18201A,inset 0 0 0 calc(var(--p)*2) rgba(255,255,255,.35);cursor:pointer}
+.slot.vacio.sel{box-shadow:inset 0 0 0 var(--p) #18201A,inset 0 0 0 calc(var(--p)*2) var(--acento,#F2C230)}
+.slot .grano,.paq-r .grano{width:calc(var(--u)*11);height:calc(var(--u)*13)}
+.slot .barra,.paq-r .barra{width:calc(var(--u)*52);height:calc(var(--u)*11)}
+.slot .fila-g,.paq-r .fila-g{gap:calc(var(--u)*4)}
+.slot .col-b,.paq-r .col-b{gap:calc(var(--u)*4)}
+.slot .cont-piso,.paq-r .cont-piso{gap:calc(var(--u)*5)}
+.slot .concha,.paq-r .concha{width:calc(var(--u)*30);height:auto;color:#F2E6D6}
+.paq-r .concha{color:var(--tinta)}
+.paquetes-r{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:calc(var(--u)*8);width:100%}
+.paq-r{min-height:calc(var(--u)*66);display:flex;align-items:center;justify-content:center;padding:calc(var(--u)*8) calc(var(--u)*4)}
+.paq-r.sel{background:var(--acento,#F2C230)}
+.paq-r.usado{visibility:hidden}
+.mal-r{animation:sacudeR .4s steps(4)}
+.paq-r.mal-r{background:#F2C9C4}
+.slot.mal-r{box-shadow:inset 0 0 0 var(--p) #18201A,inset 0 0 0 calc(var(--p)*2) #D9542E}
+@keyframes sacudeR{25%{transform:translateX(calc(var(--u)*-5))}75%{transform:translateX(calc(var(--u)*5))}}
+/* los dibujos de las explicaciones */
+.dg{display:flex;align-items:center;justify-content:center;gap:calc(var(--u)*8);flex-wrap:wrap}
+.dg-col{display:flex;flex-direction:column;align-items:center;gap:calc(var(--u)*5)}
+.dg-num{display:flex;flex-direction:column;gap:calc(var(--u)*4)}
+.dg-piso{min-width:calc(var(--u)*64);min-height:calc(var(--u)*36);display:flex;align-items:center;justify-content:center;padding:calc(var(--u)*6) calc(var(--u)*7);
+  background:repeating-linear-gradient(to bottom,transparent 0 calc(var(--u)*8),rgba(0,0,0,.28) calc(var(--u)*8) calc(var(--u)*11)),#6E341A;box-shadow:inset 0 0 0 var(--p) #18201A}
+.dg-piso.dg-vacio{background:repeating-linear-gradient(45deg,transparent 0 calc(var(--u)*6),rgba(255,255,255,.1) calc(var(--u)*6) calc(var(--u)*9)),#3A2414;box-shadow:inset 0 0 0 var(--p) #18201A,inset 0 0 0 calc(var(--p)*2) var(--acento,#F2C230)}
+.dg-piso .fila-g{display:flex;gap:calc(var(--u)*4)}.dg-piso .col-b{display:flex;flex-direction:column;gap:calc(var(--u)*4);align-items:center}
+.dg-piso .grano{width:calc(var(--u)*10);height:calc(var(--u)*12)}.dg-piso .barra{width:calc(var(--u)*46);height:calc(var(--u)*10)}
+.dg-piso .concha{width:calc(var(--u)*26);height:auto;color:#F2E6D6}
+.dg-piso{flex-direction:column;gap:calc(var(--u)*4)}
+.dg-cortada{opacity:.3;outline:calc(var(--p)*1) dashed #D9542E;outline-offset:calc(var(--u)*2)}
+.dg-nuevo{filter:brightness(1.25)}
+.dg-flecha{font-size:calc(var(--u)*22);color:var(--suave)}
+.dg-paq{padding:calc(var(--u)*4);background:var(--placa);box-shadow:inset 0 0 0 var(--p) var(--borde,#18201A)}
+.dg .sub{font-size:calc(var(--u)*11)}
+.dg.dg-abajo{align-items:flex-end}
+.dg.dg-abajo .dg-flecha{margin-bottom:calc(var(--u)*8)}
+.velo.inicio{overflow-y:auto;align-items:flex-start}
+.velo.inicio > .placa{margin-block:auto;flex-shrink:0}
 .j-top{position:relative;width:100%;height:calc(var(--u)*50);display:flex;justify-content:center;align-items:center;flex:none}
 .j-top .volver{position:absolute;left:0;top:calc(var(--u)*3)}
 .meta{min-height:calc(var(--u)*50);min-width:calc(var(--u)*92);padding:calc(var(--u)*6) calc(var(--u)*18);border-radius:calc(var(--u)*25);font:900 calc(var(--u)*30)/1 var(--display);font-variant-numeric:tabular-nums;transition:background .2s;flex-direction:column;gap:calc(var(--u)*3)}
@@ -688,10 +749,10 @@ function ponDicho(el,texto){if(el._t===texto)return;el._t=texto;el.textContent=t
 function guiaMonte(pe){
   const ap=aprend();
   if(ap==='troje'||ap==='elegir_troje')return{t:'Tus mazorcas se guardan en la troje, la casa del centro. Tócala.'};
-  if(!visto('monte'))return{t:'Este es tu monte. Las parcelas que laten te piden algo: tócalas. Llueve a las 6, 12 y 18 h, y la lluvia te espera. (Toca este aviso para cerrarlo.)',cierra:'monte'};
+  if(!visto('monte'))return{t:'Este es tu monte. Las parcelas que laten te piden algo: tócalas. Llueve a las 6, 12 y 18 h: la lluvia arranca lo que siembras y después la milpa tiene sed. (Toca este aviso para cerrarlo.)',cierra:'monte'};
   if(!visto('zoom'))return{t:'Pellizca con dos dedos para acercarte y mirar de cerca. Si miras con calma, a veces pasan cosas extrañas.',cierra:'zoom'};
   if(pe.lluvia>0)return{t:''};
-  if(est.espera>0&&pe.parcelas.some(q=>q.que==='sembrar'))return{t:`${pl(est.espera,'lluvia te espera','lluvias te esperan')}: siembra primero y luego déjala caer.`};
+  if(est.espera>0&&pe.parcelas.some(q=>q.que==='sembrar'))return{t:'Viene una lluvia: lo que siembres arrancará solo.'};
   if(pe.faltan===0){const c=est.construyendo;
     return{t:c?`Todo en orden. Se está abriendo una parcela nueva: faltan ${horas(c.falta)}.`:`Todo en orden. La próxima lluvia llega a las ${proximaLluvia(horaJuego())}:00.`};}
   return{t:''};}
@@ -700,7 +761,7 @@ function capaMonte(){
   const estB=boton('placa pildora arriba izq','','estación (mantén el dedo para el panel del prototipo)',()=>{});mantener(estB,abrirDev);
   const falt=h('div','placa pildora arriba der');
   const di=h('div','placa dicho alto t');di.hidden=true;di.addEventListener('click',()=>{if(di._cierra){marcar(di._cierra);di._t=null;if(actualizarCapa)actualizarCapa(true);}});
-  const llu=boton('placa accion abajo centro','','dejar caer las lluvias',()=>{if(QUIETO){ir('juego',{tipo:'lluvia'});return;}
+  const llu=boton('placa accion abajo centro','','regar la milpa',()=>{if(QUIETO){ir('juego',{tipo:'lluvia'});return;}
     llu.animate([{transform:'none',opacity:1},{transform:'scale(.86)',opacity:0}],{duration:220,easing:ACCEL,fill:'forwards'});setTimeout(()=>ir('juego',{tipo:'lluvia'}),180);});
   el.append(estB,falt,di,llu);
   let kE=null,kF=null,kL=null;
@@ -708,7 +769,7 @@ function capaMonte(){
     const e=estacionHoyJ();if(e!==kE){kE=e;estB.innerHTML=svgI(IC.est[e]())+`<span class="tit">${ESTS[e].n}</span>`;}
     const pe=pend();
     if(pe.faltan!==kF){kF=pe.faltan;falt.innerHTML=`<span class="txt">Pendientes</span>`+maya(pe.faltan,{r:3.2,bw:20,bh:4.5});falt.style.visibility=pe.faltan>0?'visible':'hidden';}
-    if(pe.lluvia!==kL){kL=pe.lluvia;llu.innerHTML=svgI(IC.lluvia(),'ico m acc')+`<span class="tit">Dejar caer</span>`+maya(pe.lluvia,{r:3.4})+`<span class="txt">${pe.lluvia===1?'lluvia':'lluvias'}</span>`;llu.style.display=pe.lluvia>0?'':'none';}
+    if(pe.lluvia!==kL){kL=pe.lluvia;llu.innerHTML=svgI(IC.lluvia(),'ico m acc')+`<span class="tit">Regar</span><span class="txt">la milpa tiene sed</span>`;llu.style.display=pe.lluvia>0?'':'none';}
     const g=guiaMonte(pe);di._cierra=g.cierra||null;ponDicho(di,g.t);}};}
 
 /* ---------- altura 2 · la parcela ---------- */
@@ -736,7 +797,7 @@ function estadoParcela(p,obra){
   }
   if(est.contadores.cosechas===0){const ap=aprend();
     if(ap==='sembrar')guia='Esta es tu primera parcela. Ya está quemada: su ceniza hará buena la cosecha. Toca Sembrar.';
-    else if(ap==='llover')guia='Sembraste. Ya hay una lluvia esperando: déjala caer.';
+    else if(ap==='lluvia')guia='Sembraste. La lluvia cae sola y arranca el maíz.';
     else if(ap==='esperar')guia='Con la lluvia, el maíz crece. Espera un momento.';
     else if(ap==='cosechar')guia='¡Ya está lista! Cosecha y cuenta tus mazorcas.';}
   const col=p.estado==='lista'||p.estado==='creciendo'?'ico acc':p.estado==='marchita'?'ico sua':'ico';
@@ -751,8 +812,8 @@ function accionesParcela(pos){
   else if(p.estado==='vacia'){
     accion('sembrar',`<span style="width:calc(var(--u)*18);height:calc(var(--u)*22);display:block">${semillaSVG(semillaParaSembrar(p))}</span><span class="tit">Sembrar</span>`,'sembrar',()=>{if(est.contadores.siembras===0)ir('juego',{tipo:'siembra',pos});else elegirParaSembrar(pos);},ll);
     if(p.ceniza===0&&!primera)accion('quemar',svgI(IC.fuego(),'ico')+'<span class="txt">Quemar</span>','quemar antes de sembrar',()=>ir('juego',{tipo:'quema',pos}),' secundaria');}
-  else if(p.estado==='podrida'||p.estado==='porAbrir')accion('quemar',svgI(IC.fuego(),'ico m acc')+'<span class="tit">Quemar</span>','quemar',()=>ir('juego',{tipo:'quema',pos}),ll);
-  else if(p.estado==='creciendo'){const pe=pend();if(pe.lluvia>0&&p.lluvias<D.lluvia.max_por_cultivo)accion('lluvia'+pe.lluvia,svgI(IC.lluvia(),'ico m acc')+'<span class="tit">Dejar caer</span>'+maya(pe.lluvia)+`<span class="txt">${pe.lluvia===1?'lluvia':'lluvias'}</span>`,'dejar caer la lluvia',()=>ir('juego',{tipo:'lluvia',pos}),ll);}
+  else if(p.estado==='podrida'||p.estado==='porAbrir')accion('quemar',svgI(IC.fuego(),'ico m acc')+'<span class="tit">Cortar y quemar</span>','cortar la maleza y quemar',()=>ir('juego',{tipo:'quema',pos}),ll);
+  else if(p.estado==='creciendo'){const pe=pend();if(pe.lluvia>0&&p.lluvias>=1&&p.lluvias<D.lluvia.max_por_cultivo)accion('regar',svgI(IC.lluvia(),'ico m acc')+'<span class="tit">Regar</span><span class="txt">tiene sed</span>','regar',()=>ir('juego',{tipo:'lluvia',pos}),ll);}
   return L;}
 /* desde la segunda siembra siempre eliges la semilla (Luis, 19 nov): las 4 iniciales, la última mazorca de esta parcela y las guardadas */
 function elegirParaSembrar(pos){
@@ -804,17 +865,23 @@ function capaJuego(d){
   const fin=r=>{if(vivo())finJuego(d,r);};
   if(window.MilpaPrueba)MilpaPrueba.juegoEmpieza(d);
   if(d.tipo==='siembra')juegoSiembra(raiz,paramsSiembra(d),fin,atras,vivo);
-  else if(d.tipo==='lluvia')juegoOfrenda(raiz,paramsOfrenda('agua'),fin,atras,vivo);
-  else if(d.tipo==='quema')juegoOfrenda(raiz,paramsOfrenda('fuego'),fin,atras,vivo);
+  else if(d.tipo==='lluvia')juegoRegar(raiz,paramsRegar(),fin,atras,vivo);
+  else if(d.tipo==='quema')juegoAbrir(raiz,d,fin,atras,vivo);
   else if(d.tipo==='cosecha')juegoCosecha(raiz,{n:d.practica?MilpaMotor.juegosPorVisita(D,est):juegosPorVisita(est.parcelas[d.pos]),practica:!!d.practica},fin,atras,vivo);
   return{el};}
+/* abrir una parcela (o limpiar una podrida) = Cortar y luego Quemar; antes de sembrar, solo Quemar */
+function juegoAbrir(raiz,d,fin,salirJ,vivo){const p=d.practica?null:est.parcelas[d.pos];
+  const conCorte=d.practica||(p&&(p.estado==='porAbrir'||p.estado==='podrida'));
+  if(!conCorte){juegoQuemar(raiz,paramsQuemar(),fin,salirJ,vivo);return;}
+  juegoCortar(raiz,paramsCortar(),r1=>{if(!vivo())return;raiz.className='juego';raiz.innerHTML='';
+    juegoQuemar(raiz,paramsQuemar(),r2=>fin({exito:!!(r1.exito&&r2.exito),corte:r1,quema:r2}),salirJ,vivo);},salirJ,vivo);}
 function finJuego(d,r){
   if(window.MilpaPrueba)MilpaPrueba.juegoTermina(d,r);
   if(d.practica){ir('seccion',{s:'la_practica'},{atras:true});return;}
   MilpaMotor.avanzar(D,est,Date.now());
   if(d.tipo==='siembra'){MilpaMotor.sembrar(D,est,d.pos,d.semilla);despues();ir('parcela',{pos:d.pos},{atras:true});}
   else if(d.tipo==='quema'){MilpaMotor.quemar(D,est,d.pos,!!r.exito);despues();ir('parcela',{pos:d.pos},{atras:true});if(!QUIETO)calor.animate([{opacity:0},{opacity:1,offset:.25},{opacity:0}],{duration:1400,easing:'ease-out'});}
-  else if(d.tipo==='lluvia'){const res=MilpaMotor.llover(D,est);despues();if(res.ok)iniciarLluviaVis(res.cayeron>=2);ir(d.pos?'parcela':'monte',d.pos?{pos:d.pos}:{},{atras:true});}
+  else if(d.tipo==='lluvia'){const res=MilpaMotor.regar(D,est,!!r.exito);despues();if(res.ok&&res.exito)iniciarLluviaVis(false);ir(d.pos?'parcela':'monte',d.pos?{pos:d.pos}:{},{atras:true});}
   else if(d.tipo==='cosecha'){const res=MilpaMotor.cosechar(D,est,d.pos,Date.now());despues();ir('parcela',{pos:d.pos,resultado:res.ok?res:null},{atras:true});}}
 function despues(){guardar();if(firmaMundo()!==firmaG)regenerar();revisarBordes();}
 const PESO=[1,20,400,8000,160000];
@@ -872,7 +939,7 @@ const SECCION={
     if(cuenta.sembrar)s+=filaS(svgI(IC.semilla(),'ico g acc'),pl(cuenta.sembrar,'parcela para sembrar','parcelas para sembrar'));
     if(cuenta.quemar)s+=filaS(svgI(IC.fuego(),'ico g acc'),pl(cuenta.quemar,'parcela para quemar','parcelas para quemar'));
     if(!pe.parcelas.length&&!pe.lluvia)s+=filaS(svgI(IC.brote(),'ico g acc'),'Nada pendiente en las parcelas');
-    if(hy.lluviasEsperando)s+=filaS(svgI(IC.lluvia(),'ico g'+(pe.lluvia?' acc':' sua')),pl(hy.lluviasEsperando,'lluvia te espera','lluvias te esperan'),pe.lluvia?'Déjalas caer desde el monte.':'Siembra para aprovecharlas.');
+    if(hy.lluviasEsperando)s+=filaS(svgI(IC.lluvia(),'ico g'+(pe.lluvia?' acc':' sua')),pe.lluvia?'La milpa tiene sed':'Viene una lluvia',pe.lluvia?'Riégala desde el monte.':'Arrancará lo que siembres.');
     else s+=filaS(svgI(IC.lluvia(),'ico g sua'),`Próxima lluvia: ${proximaLluvia(hv)}:00`,`Llueve a las ${D.lluvia.horas.join(', ').replace(/, (\d+)$/,' y $1')} h.`);
     {const vis=Object.keys(SUCESOS).filter(k=>SUCESOS_VISTOS[k]);s+=filaS(svgI(IC.estrella(),'ico g'+(vis.length?' acc':' sua')),`Sucesos extraños: ${vis.length} de ${Object.keys(SUCESOS).length}`,vis.length?vis.map(k=>SUCESOS[k].n).join(', ')+'.':'Mira el monte con calma, de día y de noche.');}
     if(hy.construyendo){const c=est.construyendo;s+=filaS(svgI(IC.obra(),'ico g'),`Parcela nueva: faltan ${horas(c.falta)}`,'',barraAv(1-c.falta/c.total));}
@@ -908,7 +975,7 @@ const SECCION={
  la_practica(cont){
   const g=h('div','prac');
   cont.append(h('p','nota','Practica los juegos cuando quieras. No cuenta para tu milpa.'));
-  [['siembra','semilla','Sembrar','Escribe los números'],['lluvia','lluvia','Lluvias','Dale a cada mata su agua'],['cosecha','canasta','Cosechar','Acomoda la cuenta de la troje']].forEach(([t,ic,nom,sub])=>g.append(boton('',svgI(IC[ic](),'ico g acc')+`<span class="fila-t"><span class="tit">${nom}</span><span class="sub">${sub}</span></span>`,'practicar '+nom,()=>ir('juego',{tipo:t,practica:true}))));
+  [['siembra','semilla','Sembrar','Escribe los números'],['lluvia','lluvia','Regar','A cada piso, su paquete'],['quema','fuego','Cortar y quemar','Quita lo que sobra y suma el fuego'],['cosecha','canasta','Cosechar','Acomoda la cuenta de la troje']].forEach(([t,ic,nom,sub])=>g.append(boton('',svgI(IC[ic](),'ico g acc')+`<span class="fila-t"><span class="tit">${nom}</span><span class="sub">${sub}</span></span>`,'practicar '+nom,()=>ir('juego',{tipo:t,practica:true}))));
   cont.append(g);return{};},
  tu_troje(cont){
   const pinta=()=>{const g=h('div','trojes');
@@ -1055,7 +1122,146 @@ function juegoSiembra(raiz,{metas,F,pista,ayuda},fin,salirJ,vivo){
     else if(v>T){meta.classList.remove('sacude');void meta.offsetWidth;meta.classList.add('sacude');}}
   dibujar();}
 
-/* ---------- Ofrenda a tiempo: las Lluvias (agua sobre las matas) y la Quema (fuego sobre los surcos) ---------- */
+/* ---------- Cortar, Quemar y Regar (Luis, 20 nov): los tres se ganan con números mayas por pisos ----------
+   Abrir una parcela = Cortar (quitar lo que sobra hasta el número justo) → Quemar (sumar fuego que se reagrupa).
+   Regar = parejas: a cada piso vacío de la mata, su paquete exacto (como las parejas de Duolingo). */
+function mayaPisos(v,F){const f=relleno([],F);for(let i=F-1;i>=0;i--){const q=Math.floor(v/PESO[i]);v-=q*PESO[i];f[i].b=Math.floor(q/5);f[i].d=q%5;}return f;}
+const piezasDe=f=>f.reduce((s,p)=>s+p.b+p.d,0);
+const ent=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+/* un número chico para las explicaciones: sus pisos (el de arriba primero), con piezas del color del juego */
+function dgNum(f,{cortadas=[],nuevo=null,vacio=null}={}){let s='<div class="dg-num">';let tope=-1;f.forEach((p,i)=>{if(p.b+p.d)tope=i;});
+  for(let i=f.length-1;i>=0;i--){const p=f[i];const esV=vacio===i;s+=`<div class="dg-piso${esV?' dg-vacio':''}">`;
+    if(esV){s+='</div>';continue;}
+    if(!p.b&&!p.d){s+=i<tope?CONCHA:'';s+='</div>';continue;}
+    const c=(t,k)=>`<span class="pz ${t==='b'?'barra':'grano'}${cortadas.some(x=>x.i===i&&x.t===t&&x.k===k)?' dg-cortada':''}${nuevo&&nuevo.i===i&&nuevo.t===t?' dg-nuevo':''}"></span>`;
+    if(p.d){s+='<div class="fila-g">';for(let k=0;k<p.d;k++)s+=c('d',k);s+='</div>';}
+    if(p.b){s+='<div class="col-b">';for(let k=0;k<p.b;k++)s+=c('b',k);s+='</div>';}
+    s+='</div>';}
+  return s+'</div>';}
+/* la explicación antes de empezar: tapa el juego y lo enseña con un dibujo (Luis: "debe ser más visual") */
+function explicar(raiz,{tit,dibujo,pasos,sub,boton:btxt,ico,clase=''},alEmpezar){
+  raiz.classList.add('esperando');const v=h('div','velo inicio t');
+  v.innerHTML=`<div class="placa res"><span class="tit grande">${tit}</span><div class="dg ${clase}" aria-hidden="true">${dibujo}</div>
+    <ul class="pasos">${pasos.map(p=>`<li><span class="txt">${p}</span></li>`).join('')}</ul>${sub?`<p class="sub">${sub}</p>`:''}</div>`;
+  const b=boton('placa accion',svgI(ico,'ico m acc')+`<span class="tit">${btxt}</span>`,btxt,()=>{v.style.pointerEvents='none';raiz.classList.remove('esperando');
+    v.animate([{opacity:1},{opacity:0}],{duration:QUIETO?80:260,fill:'forwards'});setTimeout(()=>v.remove(),280);alEmpezar&&alEmpezar();});
+  v.firstChild.append(b);raiz.append(v);}
+const leyendaPz=(extra='')=>h('div','placa leyenda',`<div class="gesto"><span class="pz grano"></span><span class="txt">= 1</span></div><span class="sep"></span><div class="gesto"><span class="pz barra"></span><span class="txt">= 5</span></div>${extra}`);
+function fuegosHTML(quedan,total){return `<span class="txt">fuegos</span><span class="pips">${Array.from({length:total},(_,k)=>`<i class="${k<quedan?'':'no'}"></i>`).join('')}</span>`;}
+
+/* ===== Cortar: la maleza escrita en maya tiene piezas de más; tocas las que sobran hasta que se lea el número ===== */
+function paramsCortar(n=2){const F=Math.min(2,est.troje.piso),R=[];
+  for(let j=0;j<n;j++){for(let t=0;t<200;t++){const T=F===1?ent(4,19):ent(21,99),tf=mayaPisos(T,F),mf=tf.map(p=>({...p}));let extra=0;
+      for(let i=0;i<F;i++){if(i===1&&tf[1].b+tf[1].d===0&&Math.random()<.6)continue;mf[i].d=ent(tf[i].d,4);mf[i].b=ent(tf[i].b,3);extra+=mf[i].d-tf[i].d+mf[i].b-tf[i].b;}
+      if(extra<2||extra>(F===1?4:6))continue;R.push({T,tf,mf});break;}
+    if(R.length<=j)R.push({T:7,tf:mayaPisos(7,F),mf:mayaPisos(F===1?13:33,F)});}
+  return{rondas:R,F};}
+function juegoCortar(raiz,{rondas,F},fin,salirJ,vivo){
+  raiz.classList.add('cortar','maleza');
+  const top=h('div','j-top con-instr');top.append(btnVolver(salirJ,''));
+  const instr=h('p','instr','Toca las piezas que sobran para cortarlas, hasta que se lea el número que pide.'+(F>1?' Arriba cada punto vale 20.':''));top.append(instr);
+  const meta=h('div','placa meta'),av=h('div','avance'),pisosEl=h('div','pisos'),zona=h('div','zona');zona.style.setProperty('--alto-piso',`calc(var(--u)*${F>1?128:150})`);
+  zona.append(meta,av,pisosEl);raiz.append(top,zona,leyendaPz());
+  let k=0,f=null,busy=false;const res=[],pisos=[];
+  for(let i=F-1;i>=0;i--){const el=h('div','piso');if(F>1)el.append(h('span','placa mult','×'+fmtN(PESO[i])));const c=h('div','');el.append(c);pisosEl.append(el);pisos[i]={el,c};
+    el.addEventListener('click',e=>{const pc=e.target.closest('[data-t]');if(pc)cortar(i,pc.dataset.t,pc);});}
+  function dibujar(fx={}){const R=rondas[k];meta.innerHTML=`<small>deja</small><b>${fmtN(R.T)}</b><span class="llevas">queda ${fmtN(valor(f))}</span>`;
+    av.innerHTML=rondas.length>1?rondas.map((_,j)=>`<i class="${j<res.length?(res[j]?'on':'mal'):''}"></i>`).join(''):'';
+    let tp=-1;f.forEach((p,i)=>{if(p.b+p.d>0)tp=i;});pisos.forEach((P,i)=>{P.c.innerHTML=contenido(f[i],i,tp,fx);});}
+  function empieza(){f=rondas[k].mf.map(p=>({...p}));pisos.forEach(P=>P.el.classList.remove('ok','falta'));meta.classList.remove('bien','mal');dibujar();}
+  async function cortar(i,t,el){if(busy||k>=rondas.length)return;busy=true;const R=rondas[k];
+    el.animate([{transform:'none',opacity:1},{transform:`translate(${ent(8,20)}px,${ent(26,40)}px) rotate(${ent(30,70)}deg)`,opacity:0}],{duration:QUIETO?60:320,easing:'ease-in',fill:'forwards'});
+    await dormir(260);if(!vivo())return;f[i][t]--;dibujar();
+    if(f[i][t]<R.tf[i][t]){pisos[i].el.classList.add('falta');meta.classList.remove('sacude');void meta.offsetWidth;meta.classList.add('sacude','mal');res.push(0);dibujar();await dormir(1300);if(!vivo())return;return siguiente();}
+    if(valor(f)===R.T){pisos.forEach(P=>P.el.classList.add('ok'));meta.classList.add('bien');res.push(1);dibujar();await dormir(700);if(!vivo())return;return siguiente();}
+    busy=false;}
+  function siguiente(){k++;busy=false;if(k>=rondas.length){fin({exito:res.every(Boolean),ok:res.filter(Boolean).length,lost:res.filter(x=>!x).length});return;}empieza();}
+  empieza();
+  const ej=F>1?{a:mayaPisos(52,2),b:mayaPisos(27,2),T:27}:{a:mayaPisos(12,1),b:mayaPisos(7,1),T:7};
+  const cort=[];if(F>1){cort.push({i:1,t:'d',k:1},{i:0,t:'d',k:2});}else cort.push({i:0,t:'b',k:1});
+  explicar(raiz,{tit:'Cortar la maleza',ico:IC.quitar(),boton:'Empezar a cortar',
+    dibujo:`<div class="dg-col">${dgNum(ej.a,{cortadas:cort})}<span class="sub">hay ${ej.a.reduce((s,p,i)=>s+(p.d+5*p.b)*PESO[i],0)}</span></div><span class="dg-flecha">→</span><div class="dg-col">${dgNum(ej.b)}<span class="sub">deja ${ej.T}</span></div>`,
+    pasos:['Toca lo que sobra para cortarlo.',F>1?'Mira piso por piso: arriba cada punto vale 20.':'Un grano vale 1; una barra, 5.','Si cortas lo que el número necesita, el surco se pierde.'],
+    sub:'Luego se quema.'});}
+
+/* ===== Quemar: ya hay brasas; agregas fuego (tocar = brasa, deslizar = llama) y se reagrupa. Pocos fuegos. ===== */
+function paramsQuemar(n=2){const F=Math.min(2,est.troje.piso),R=[],holgura=est.contadores.quemas<3?1:0;
+  for(let j=0;j<n;j++){let W,T;if(F===1){W=ent(2,9);T=ent(W+4,19);}else{W=ent(3,39);T=W+ent(12,58);}R.push({W,T,max:piezasDe(mayaPisos(T-W,F))+holgura});}
+  return{rondas:R,F};}
+function juegoQuemar(raiz,{rondas,F},fin,salirJ,vivo){
+  raiz.classList.add('quemar','fuego');
+  const top=h('div','j-top con-instr');top.append(btnVolver(salirJ,''));
+  const instr=h('p','instr','Toca un surco: una brasa. Desliza de lado: una llama. Se junta con lo que ya arde.'+(F>1?' Cuatro llamas suben un punto: 20.':''));top.append(instr);
+  const meta=h('div','placa meta'),av=h('div','avance'),fu=h('div','placa fuegos'),pisosEl=h('div','pisos'),zona=h('div','zona');zona.style.setProperty('--alto-piso',`calc(var(--u)*${F>1?120:140})`);
+  zona.append(meta,av,fu,pisosEl);
+  const ley=leyendaPz('<span class="sep"></span>');const hist=[];
+  const btnB=boton('borrar',svgI(IC.quitar(),'ico')+'<span class="txt">Borrar</span>','borrar lo último',()=>{if(busy||!hist.length)return;const x=hist.pop();f=x.f;dadas=x.dadas;dibujar();});ley.append(btnB);
+  raiz.append(top,zona,ley);
+  let k=0,f=null,dadas=0,busy=false,fx={};const res=[],pisos=[],cola=[];
+  for(let i=F-1;i>=0;i--){const el=h('div','piso');if(F>1)el.append(h('span','placa mult','×'+fmtN(PESO[i])));const c=h('div','');el.append(c);pisosEl.append(el);pisos[i]={el,c};gestosPiso(el,i,gesto);}
+  function dibujar(){const R=rondas[k];meta.innerHTML=`<small>la quema pide</small><b>${fmtN(R.T)}</b><span class="llevas">lleva ${fmtN(valor(f))}</span>`;
+    av.innerHTML=rondas.length>1?rondas.map((_,j)=>`<i class="${j<res.length?(res[j]?'on':'mal'):''}"></i>`).join(''):'';
+    fu.innerHTML=fuegosHTML(R.max-dadas,R.max);
+    let tp=-1;f.forEach((p,i)=>{if(p.b+p.d>0)tp=i;});pisos.forEach((P,i)=>{P.c.innerHTML=contenido(f[i],i,tp,fx);});btnB.classList.toggle('apagado',!hist.length);}
+  function empieza(){const R=rondas[k];f=mayaPisos(R.W,F);dadas=0;hist.length=0;pisos.forEach(P=>P.el.classList.remove('ok','falta'));meta.classList.remove('bien','mal');dibujar();}
+  function gesto(i,t){if(t[0]==='-'||busy||k>=rondas.length||dadas>=rondas[k].max)return;cola.push([i,t]);correr();}
+  async function correr(){if(busy)return;busy=true;
+    while(cola.length){const [i,t]=cola.shift();if(dadas>=rondas[k].max)break;hist.push({f:f.map(p=>({...p})),dadas});dadas++;f[i][t]++;fx={pop:{i,t}};dibujar();
+      await cascada(f,x=>{fx=x;dibujar();});if(!vivo())return;}
+    cola.length=0;fx={};dibujar();const R=rondas[k],v=valor(f);
+    if(v>R.T){meta.classList.remove('sacude');void meta.offsetWidth;meta.classList.add('sacude','mal');res.push(0);dibujar();await dormir(1200);if(!vivo())return;return siguiente();}
+    if(v===R.T){pisos.forEach(P=>P.el.classList.add('ok'));meta.classList.add('bien');res.push(1);dibujar();await dormir(700);if(!vivo())return;return siguiente();}
+    if(dadas>=R.max){meta.classList.add('mal');res.push(0);dibujar();await dormir(1200);if(!vivo())return;return siguiente();}
+    busy=false;}
+  function siguiente(){k++;busy=false;if(k>=rondas.length){fin({exito:res.every(Boolean),ok:res.filter(Boolean).length,lost:res.filter(x=>!x).length});return;}empieza();}
+  empieza();
+  const dib=F>1?`<div class="dg-col">${dgNum([{d:4,b:3},{d:0,b:0}])}<span class="sub">arden 19</span></div><span class="dg-flecha">+</span><div class="dg-col">${dgNum([{d:1,b:0},{d:0,b:0}],{nuevo:{i:0,t:'d'}})}<span class="sub">una brasa</span></div><span class="dg-flecha">→</span><div class="dg-col">${dgNum([{d:0,b:0},{d:1,b:0}],{nuevo:{i:1,t:'d'}})}<span class="sub">¡20!</span></div>`
+    :`<div class="dg-col">${dgNum([{d:4,b:1}])}<span class="sub">arden 9</span></div><span class="dg-flecha">+</span><div class="dg-col">${dgNum([{d:1,b:0}],{nuevo:{i:0,t:'d'}})}<span class="sub">una brasa</span></div><span class="dg-flecha">→</span><div class="dg-col">${dgNum([{d:0,b:2}],{nuevo:{i:0,t:'b'}})}<span class="sub">10</span></div>`;
+  explicar(raiz,{tit:'La quema',ico:IC.fuego(),boton:'Empezar la quema',dibujo:dib,
+    pasos:['Dale a la quema el fuego que le falta, justo.','Toca: una brasa (1). Desliza: una llama (5).',F>1?'Cuatro llamas suben un punto: 20.':'Cinco brasas hacen una llama.'],
+    sub:'Pocos fuegos. Si te pasas, se quema la tierra.'});}
+
+/* ===== Regar: parejas. Cada mata pide su número; la lluvia ya llenó algunos pisos; a cada piso vacío, su paquete ===== */
+/* siempre dos pisos (su lección es el valor de los pisos). Al principio la lluvia llena el de arriba y tú completas el de abajo;
+   con la troje más alta, el piso vacío puede ser cualquiera y a veces los dos. */
+function paramsRegar(){const alto=est.troje.piso>=2,dobles=alto&&est.contadores.lluvias>=4,matas=[],usados=new Set();
+  for(let j=0;j<3;j++){let T;do{T=alto?ent(20,99):ent(20,59);}while(usados.has(T));usados.add(T);const f=mayaPisos(T,2);
+    const vac=dobles&&Math.random()<.35?[0,1]:[alto?ent(0,1):0];matas.push({T,f,vacio:new Set(vac),lleno:new Set()});}
+  return{matas};}
+function juegoRegar(raiz,{matas},fin,salirJ,vivo){
+  raiz.classList.add('regar','agua');
+  const top=h('div','j-top con-instr');top.append(btnVolver(salirJ,''));
+  const instr=h('p','instr','Toca un paquete de agua y luego el piso vacío donde va (o al revés). Cada piso, su paquete exacto.');top.append(instr);
+  const gotas=h('div','placa gotas'),grid=h('div','matas-r'),pq=h('div','paquetes-r'),zona=h('div','zona zona-r');zona.append(gotas,grid,pq);raiz.append(top,zona);
+  const paq=[];matas.forEach((m,j)=>m.vacio.forEach(i=>paq.push({j,i,d:m.f[i].d,b:m.f[i].b,usado:false})));
+  for(let x=paq.length-1;x>0;x--){const y=Math.floor(Math.random()*(x+1));[paq[x],paq[y]]=[paq[y],paq[x]];}
+  const MAXE=3;let errores=0,selP=-1,selS=null,busy=false,acabo=false;
+  const pzs=(d,b)=>(!d&&!b)?CONCHA:`<div class="cont-piso">${d?`<div class="fila-g">${'<span class="pz grano"></span>'.repeat(d)}</div>`:''}${b?`<div class="col-b">${'<span class="pz barra"></span>'.repeat(b)}</div>`:''}</div>`;
+  function dibujar(mal){gotas.innerHTML=`<span class="txt">agua de sobra</span><span class="pips">${Array.from({length:MAXE},(_,e)=>`<i class="${e<MAXE-errores?'':'no'}"></i>`).join('')}</span>`;
+    grid.innerHTML='';matas.forEach((m,j)=>{const lista=[...m.vacio].every(i=>m.lleno.has(i));const c=h('div','placa mata-r'+(lista?' bien':''));
+      c.innerHTML=`<span class="dib">${mataSVG(lista?1:.45,lista?'done':'')}</span><span class="pide"><small>pide</small><b>${fmtN(m.T)}</b></span>`;const sl=h('div','slots');
+      const n=m.f.length;for(let i=n-1;i>=0;i--){const p=m.f[i],esV=m.vacio.has(i)&&!m.lleno.has(i);
+        const s=esV?boton('slot vacio','',`piso ×${PESO[i]} vacío de la mata que pide ${m.T}`,()=>tocaSlot(j,i)):h('div','slot');
+        if(n>1)s.append(h('span','x','×'+PESO[i]));if(!esV){const w=h('div','w');w.innerHTML=pzs(p.d,p.b);s.append(w);}
+        if(esV&&selS&&selS.j===j&&selS.i===i)s.classList.add('sel');if(esV&&mal&&mal.s&&mal.s.j===j&&mal.s.i===i)s.classList.add('mal-r');sl.append(s);}
+      c.append(sl);grid.append(c);});
+    pq.innerHTML='';paq.forEach((p,x)=>{const b=boton('placa paq-r'+(p.usado?' usado':'')+(x===selP?' sel':'')+(mal&&mal.p===x?' mal-r':''),pzs(p.d,p.b),'paquete de agua '+(x+1),()=>tocaPaq(x));pq.append(b);});}
+  function tocaPaq(x){if(busy||acabo||paq[x].usado)return;selP=selP===x?-1:x;if(selP>=0&&selS)return intenta();dibujar();}
+  function tocaSlot(j,i){if(busy||acabo)return;selS=selS&&selS.j===j&&selS.i===i?null:{j,i};if(selS&&selP>=0)return intenta();dibujar();}
+  async function intenta(){const p=paq[selP],m=matas[selS.j],q=m.f[selS.i];
+    if(p.d===q.d&&p.b===q.b){p.usado=true;m.lleno.add(selS.i);selP=-1;selS=null;dibujar();
+      if(paq.every(z=>z.usado)){acabo=true;await dormir(800);if(!vivo())return;fin({exito:true,errores});}return;}
+    errores++;busy=true;dibujar({p:selP,s:selS});await dormir(480);if(!vivo())return;selP=-1;selS=null;busy=false;
+    if(errores>=MAXE){acabo=true;dibujar();grid.querySelectorAll('.mata-r:not(.bien)').forEach(c=>c.classList.add('ahogada'));await dormir(1100);if(!vivo())return;fin({exito:false,errores});return;}
+    dibujar();}
+  dibujar();
+  const ejF=[{d:3,b:0},{d:1,b:0}];
+  explicar(raiz,{tit:'Regar',ico:IC.lluvia(),boton:'Regar',
+    clase:'dg-abajo',dibujo:`<div class="dg-col"><span class="sub">pide 23</span>${dgNum(ejF,{vacio:0})}</div><span class="dg-flecha">←</span><div class="dg-col"><span class="sub">su paquete</span><div class="dg-paq">${dgNum([{d:3,b:0}])}</div></div>`,
+    pasos:['A cada piso vacío, su paquete exacto.','23 es un punto arriba (20) y tres abajo.','Toca el paquete y luego su piso. Si el piso vale cero, va la concha.'],
+    sub:'Tres errores y la milpa se encharca.'});}
+
+/* ---------- (sin uso desde el 20 nov) Ofrenda a tiempo: las Lluvias (agua sobre las matas) y la Quema (fuego sobre los surcos) ---------- */
 function mataSVG(p,estado){const alto=10+Math.round(40*Math.min(1,p)),top=58-alto,col=estado==='seca'?'#B08A55':'#4C9A3E',tallo=estado==='seca'?'#9A7B4F':'#3F8A3A';
   const hojas=alto>18&&estado!=='seca'?`<path d="M23 ${58-alto*.45} C14 ${58-alto*.5} 10 ${58-alto*.7} 8 ${58-alto*.85} C15 ${58-alto*.8} 20 ${58-alto*.65} 23 ${58-alto*.55} Z" fill="${col}"/><path d="M23 ${58-alto*.65} C32 ${58-alto*.7} 36 ${58-alto*.85} 38 ${58-alto} C31 ${58-alto*.95} 26 ${58-alto*.85} 23 ${58-alto*.75} Z" fill="${col}"/>`:'';
   const tl=estado==='seca'?`M23 58 L23 ${58-alto*.6} L31 ${58-alto*.45}`:`M23 58 L23 ${top}`;
