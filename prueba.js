@@ -36,25 +36,25 @@ const NOMBRE={a:'ronda A, un día',b:'ronda B, una semana'};
 const css=`
 #app.amigo #reiniciar,#app.amigo .dev-b{display:none!important}
 #mp-opinion{position:absolute;left:calc(var(--u)*10);bottom:calc(env(safe-area-inset-bottom,0px) + var(--u)*8);z-index:8;padding:calc(var(--u)*6) calc(var(--u)*10);
-  font:400 calc(var(--u)*13)/1 "Pixelify Sans",monospace;color:#FFFFFF;background:rgba(10,16,12,.68);
+  font:400 calc(var(--u)*13)/1 "Silkscreen","Pixelify Sans",monospace;color:#FFFFFF;background:rgba(10,16,12,.68);
   text-shadow:1px 0 0 #000,-1px 0 0 #000,0 1px 0 #000,0 -1px 0 #000}
 .mp-velo{position:absolute;inset:0;z-index:11;background:rgba(6,10,8,.6);display:flex;align-items:flex-end;justify-content:center;pointer-events:auto;
   padding:calc(env(safe-area-inset-top,0px) + var(--u)*16) calc(var(--u)*10) calc(env(safe-area-inset-bottom,0px) + var(--u)*10)}
 .mp-hoja{width:100%;max-height:100%;overflow-y:auto;background:rgba(10,16,12,.97);color:#FFFFFF;padding:calc(var(--u)*18) calc(var(--u)*16);
-  display:flex;flex-direction:column;gap:calc(var(--u)*14);font:400 calc(var(--u)*13)/1.35 "Pixelify Sans",monospace;
+  display:flex;flex-direction:column;gap:calc(var(--u)*14);font:400 calc(var(--u)*13)/1.35 "Silkscreen","Pixelify Sans",monospace;
   box-shadow:inset 0 0 0 calc(var(--u)*1.6667) rgba(255,255,255,.35)}
 #app.noche .mp-hoja{background:rgba(8,11,26,.97)}
-.mp-hoja h2{font:400 calc(var(--u)*20)/1.15 "Pixelify Sans",monospace;margin:0;color:#F2C230}
+.mp-hoja h2{font:400 calc(var(--u)*20)/1.15 "Silkscreen","Pixelify Sans",monospace;margin:0;color:#F2C230}
 .mp-hoja p{margin:0;color:#D3DCCE}
 .mp-preg{display:flex;flex-direction:column;gap:calc(var(--u)*8)}
 .mp-preg .q{font-size:calc(var(--u)*14);color:#FFFFFF}
 .mp-ops{display:flex;flex-wrap:wrap;gap:calc(var(--u)*6)}
-.mp-ops button,.mp-btn{font:400 calc(var(--u)*13)/1.1 "Pixelify Sans",monospace;color:#FFFFFF;padding:calc(var(--u)*8) calc(var(--u)*10);
+.mp-ops button,.mp-btn{font:400 calc(var(--u)*13)/1.1 "Silkscreen","Pixelify Sans",monospace;color:#FFFFFF;padding:calc(var(--u)*8) calc(var(--u)*10);
   box-shadow:inset 0 0 0 calc(var(--u)*1.6667) rgba(255,255,255,.55);background:transparent;text-align:left}
 .mp-ops button[aria-pressed="true"]{background:#F2C230;color:#18201A;box-shadow:none}
 .mp-btn.prim{background:#F2C230;color:#18201A;box-shadow:none;text-align:center}
 .mp-fila{display:flex;flex-wrap:wrap;gap:calc(var(--u)*8);justify-content:flex-end}
-.mp-hoja textarea{width:100%;min-height:calc(var(--u)*70);font:400 calc(var(--u)*13)/1.35 "Pixelify Sans",monospace;color:#18201A;background:#FFFFFF;border:0;padding:calc(var(--u)*8);resize:vertical}
+.mp-hoja textarea{width:100%;min-height:calc(var(--u)*70);font:400 calc(var(--u)*13)/1.35 "Silkscreen","Pixelify Sans",monospace;color:#18201A;background:#FFFFFF;border:0;padding:calc(var(--u)*8);resize:vertical}
 .mp-hoja textarea.salida{min-height:calc(var(--u)*130);font-size:calc(var(--u)*11)}
 .mp-nota{font-size:calc(var(--u)*11);color:#B9C3B4}
 `;

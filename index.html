@@ -11,6 +11,8 @@
 <meta name="apple-mobile-web-app-title" content="La Milpa">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@800;900&family=Inter:wght@500;600&family=Pixelify+Sans:wght@400;500;600;700&display=swap">
+<!-- los dígitos 0–9 en Silkscreen (Luis, 20 nov: en Pixelify el 2 y el 5 parecen S y el 7 no se lee); el resto del texto sigue en Pixelify -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Silkscreen&text=0123456789&display=swap">
 <style>
 /* La Milpa · prototipo jugable para el teléfono. Una sola pantalla: el mundo de píxel (milpa-render.js) llena todo y la
    interfaz va encima, en placas con íconos y números en puntos y barras. El ciclo lo lleva el motor (motor.js). */
@@ -313,11 +315,11 @@ button.maz{background:rgba(127,127,127,.13)}
 .dev p{margin:0;color:var(--suave);font-size:13px}
 /* el reloj de 24 h (Luis, 19 nov): mediodía arriba, medianoche abajo; la manecilla da una vuelta por día */
 #reloj{position:absolute;right:calc(var(--u)*10);bottom:calc(env(safe-area-inset-bottom,0px) + var(--u)*6);z-index:8;display:flex;align-items:center;gap:calc(var(--u)*5);pointer-events:none;
-  color:#FFFFFF;font:400 calc(var(--u)*13)/1 "Pixelify Sans",monospace;text-shadow:1px 0 0 #000,-1px 0 0 #000,0 1px 0 #000,0 -1px 0 #000}
+  color:#FFFFFF;font:400 calc(var(--u)*13)/1 "Silkscreen","Pixelify Sans",monospace;text-shadow:1px 0 0 #000,-1px 0 0 #000,0 1px 0 #000,0 -1px 0 #000}
 #reloj svg{width:calc(var(--u)*30);height:calc(var(--u)*30);display:block;shape-rendering:crispEdges;filter:drop-shadow(1px 0 0 #000) drop-shadow(-1px 0 0 #000) drop-shadow(0 1px 0 #000) drop-shadow(0 -1px 0 #000)}
 #reloj .dia{display:block;font-size:calc(var(--u)*10);opacity:.85;margin-top:calc(var(--u)*2)}
 #reiniciar{position:absolute;left:calc(var(--u)*10);bottom:calc(env(safe-area-inset-bottom,0px) + var(--u)*6);z-index:8;padding:calc(var(--u)*4) calc(var(--u)*8);
-  font:400 calc(var(--u)*11)/1 "Pixelify Sans",monospace;color:#FFFFFF;background:rgba(10,16,12,.55);opacity:.75;
+  font:400 calc(var(--u)*11)/1 "Silkscreen","Pixelify Sans",monospace;color:#FFFFFF;background:rgba(10,16,12,.55);opacity:.75;
   text-shadow:1px 0 0 #000,-1px 0 0 #000,0 1px 0 #000,0 -1px 0 #000}
 #reiniciar.seguro{background:#C8372D;opacity:1}
 #calor{position:absolute;inset:0;pointer-events:none;opacity:0;background:radial-gradient(circle at 50% 46%,rgba(255,150,50,.6),rgba(255,90,20,.15) 55%,rgba(255,90,20,0) 80%)}
@@ -329,7 +331,7 @@ button.maz{background:rgba(127,127,127,.13)}
 /* ===== la interfaz en píxel (Luis, 19 nov; docs/milpa-estetica.md §27–§28) =====
    Base A: placas de píxel con contorno de 1 píxel del mundo y una franja de sombra abajo (juegos, troje, secciones).
    D en el monte (y en la parcela y llevar semilla): marcas oscuras sobre el mundo, sin placas blancas. Todo en Pixelify Sans. */
-#app{--p:calc(var(--u)*1.6667);--display:"Pixelify Sans","Archivo",monospace;--body:"Pixelify Sans","Inter",monospace;font-family:"Pixelify Sans",monospace;--borde:#18201A;--bajo:rgba(0,0,0,.12)}
+#app{--p:calc(var(--u)*1.6667);--display:"Silkscreen","Pixelify Sans","Archivo",monospace;--body:"Silkscreen","Pixelify Sans","Inter",monospace;font-family:"Silkscreen","Pixelify Sans",monospace;--borde:#18201A;--bajo:rgba(0,0,0,.12)}
 #app *{border-radius:0!important;font-synthesis:none}
 #app,#app *{font-weight:400!important}   /* desde 500, la "C" de Pixelify se cierra (parece "O") y el 5 parece S: la jerarquía va por tamaño */
 #app .placa{box-shadow:inset 0 0 0 var(--p) var(--borde),inset 0 calc(var(--p)*-3) 0 0 var(--bajo);clip-path:polygon(0 var(--p),var(--p) var(--p),var(--p) 0,calc(100% - var(--p)) 0,calc(100% - var(--p)) var(--p),100% var(--p),100% calc(100% - var(--p)),calc(100% - var(--p)) calc(100% - var(--p)),calc(100% - var(--p)) 100%,var(--p) 100%,var(--p) calc(100% - var(--p)),0 calc(100% - var(--p)))}
